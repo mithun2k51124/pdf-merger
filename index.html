@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Merger</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#EAE8E4;
+  --surface:#FFFFFF;
+  --surface-2:#F3F1EE;
+  --ink:#221F1C;
+  --muted:#726E68;
+  --line:#D9D5CF;
+  --accent:#2F6B5E;
+  --accent-strong:#234F45;
+  --accent-ink:#FDFBF9;
+  --danger:#B33F30;
+  --radius:10px;
+  --shadow:0 1px 2px rgba(20,18,15,0.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B1A18;
+    --surface:#242220;
+    --surface-2:#2B2926;
+    --ink:#EDEAE5;
+    --muted:#9C978F;
+    --line:#3A3733;
+    --accent:#4F9C89;
+    --accent-strong:#6BB6A2;
+    --accent-ink:#0E1512;
+    --danger:#E2695A;
+    --shadow:0 1px 2px rgba(0,0,0,0.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B1A18;
+  --surface:#242220;
+  --surface-2:#2B2926;
+  --ink:#EDEAE5;
+  --muted:#9C978F;
+  --line:#3A3733;
+  --accent:#4F9C89;
+  --accent-strong:#6BB6A2;
+  --accent-ink:#0E1512;
+  --danger:#E2695A;
+  --shadow:0 1px 2px rgba(0,0,0,0.3);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter', system-ui, -apple-system, sans-serif;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important; animation:none !important;}
+}
+
+a{color:inherit;}
+button{font-family:inherit;}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+.wrap{
+  max-width:760px;
+  margin:0 auto;
+  padding:40px 20px 80px;
+}
+
+.masthead{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:6px;
+}
+.wordmark{
+  font-family:'Space Grotesk', system-ui, sans-serif;
+  font-weight:700;
+  font-size:26px;
+  letter-spacing:-0.01em;
+  margin:0;
+}
+.wordmark .dot{color:var(--accent);}
+.tagline{
+  color:var(--muted);
+  font-size:14px;
+  margin:0 0 28px;
+}
+
+.tabs{
+  display:flex;
+  gap:4px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:28px;
+}
+.tab{
+  background:none;
+  border:none;
+  padding:11px 4px;
+  margin-right:22px;
+  font-size:15px;
+  font-weight:500;
+  color:var(--muted);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transform:translateY(1px);
+}
+.tab:hover{color:var(--ink);}
+.tab.active{
+  color:var(--ink);
+  border-bottom-color:var(--accent);
+  font-weight:600;
+}
+
+.panel{display:none;}
+.panel.active{display:block;}
+
+.dropzone{
+  border:1.5px dashed var(--line);
+  border-radius:var(--radius);
+  background:var(--surface);
+  padding:36px 20px;
+  text-align:center;
+  cursor:pointer;
+}
+.dropzone.drag{
+  border-color:var(--accent);
+  background:var(--surface-2);
+}
+.dropzone-icon{
+  width:34px;height:34px;
+  margin:0 auto 12px;
+  color:var(--muted);
+}
+.dropzone p{margin:0;font-size:14.5px;}
+.dropzone .dz-title{font-weight:500;color:var(--ink);}
+.dropzone .dz-sub{color:var(--muted); font-size:13px; margin-top:4px;}
+input[type="file"]{display:none;}
+
+.filelist{
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.file-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:11px 12px;
+}
+.file-row.dragging{opacity:0.4;}
+.drag-handle{
+  cursor:grab;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1;
+  padding:2px 4px;
+  user-select:none;
+}
+.file-index{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:12px;
+  color:var(--muted);
+  width:18px;
+  flex-shrink:0;
+}
+.file-name{
+  flex:1;
+  min-width:0;
+  font-size:14px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.file-size{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:12px;
+  color:var(--muted);
+  flex-shrink:0;
+}
+.file-remove{
+  background:none;
+  border:none;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:16px;
+  padding:2px 6px;
+  flex-shrink:0;
+}
+.file-remove:hover{color:var(--danger);}
+
+.controls-row{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.field label{
+  font-size:12.5px;
+  color:var(--muted);
+}
+select, .segmented{
+  font-family:'Inter', sans-serif;
+  font-size:14px;
+}
+select{
+  background:var(--surface);
+  color:var(--ink);
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:8px 10px;
+}
+.segmented{
+  display:flex;
+  border:1px solid var(--line);
+  border-radius:7px;
+  overflow:hidden;
+}
+.segmented button{
+  background:var(--surface);
+  border:none;
+  color:var(--muted);
+  padding:8px 14px;
+  font-size:13.5px;
+  cursor:pointer;
+  border-right:1px solid var(--line);
+}
+.segmented button:last-child{border-right:none;}
+.segmented button.active{
+  background:var(--accent);
+  color:var(--accent-ink);
+  font-weight:500;
+}
+input[type="range"]{
+  accent-color:var(--accent);
+  width:150px;
+}
+.range-value{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:13px;
+  color:var(--muted);
+  min-width:34px;
+}
+
+.primary-btn{
+  background:var(--accent);
+  color:var(--accent-ink);
+  border:none;
+  border-radius:7px;
+  padding:11px 22px;
+  font-size:14.5px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:22px;
+}
+.primary-btn:hover{background:var(--accent-strong);}
+.primary-btn:disabled{
+  background:var(--line);
+  color:var(--muted);
+  cursor:not-allowed;
+}
+
+.hint{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-top:10px;
+  max-width:52ch;
+}
+
+.status{
+  margin-top:16px;
+  font-size:13.5px;
+  color:var(--muted);
+  display:none;
+  align-items:center;
+  gap:8px;
+}
+.status.active{display:flex;}
+.spinner{
+  width:13px;height:13px;
+  border-radius:50%;
+  border:2px solid var(--line);
+  border-top-color:var(--accent);
+  animation:spin 0.7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.results{
+  margin-top:22px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.result-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+}
+.result-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+.result-name{font-size:14px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.download-btn{
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  color:var(--ink);
+  border-radius:6px;
+  padding:6px 12px;
+  font-size:13px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.download-btn:hover{border-color:var(--accent); color:var(--accent-strong);}
+.size-compare{display:flex; flex-direction:column; gap:5px;}
+.size-bar-row{display:flex; align-items:center; gap:8px;}
+.size-bar-label{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:11.5px;
+  color:var(--muted);
+  width:64px;
+  flex-shrink:0;
+}
+.size-bar-track{
+  flex:1;
+  background:var(--surface-2);
+  border-radius:4px;
+  height:8px;
+  overflow:hidden;
+}
+.size-bar-fill{
+  height:100%;
+  background:var(--muted);
+  border-radius:4px;
+}
+.size-bar-fill.after{background:var(--accent);}
+.size-bar-val{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:11.5px;
+  color:var(--ink);
+  width:60px;
+  text-align:right;
+  flex-shrink:0;
+}
+.savings-tag{
+  display:inline-block;
+  margin-top:8px;
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:11.5px;
+  background:var(--surface-2);
+  color:var(--accent-strong);
+  border-radius:5px;
+  padding:2px 7px;
+}
+.zip-all{
+  align-self:flex-start;
+  margin-top:2px;
+}
+
+.ad-slot{
+  margin-top:44px;
+  border:1px dashed var(--line);
+  border-radius:var(--radius);
+  padding:14px;
+  text-align:center;
+  font-size:11.5px;
+  color:var(--muted);
+  letter-spacing:0.01em;
+}
+
+.footer{
+  margin-top:36px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+  font-size:12.5px;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+@media (max-width:480px){
+  .wrap{padding:28px 16px 60px;}
+  .wordmark{font-size:22px;}
+  .tabs{gap:0;}
+  .tab{margin-right:16px; font-size:14px;}
+  .controls-row{gap:14px;}
+  input[type="range"]{width:110px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <p class="wordmark">PDF Merger<span class="dot">.</span></p>
+  </div>
+  <p class="tagline">Merge, shrink and clean up PDFs and images — right in your browser.</p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="merge" role="tab" aria-selected="true">Merge PDFs</button>
+    <button class="tab" data-tab="compress-pdf" role="tab" aria-selected="false">Compress PDF</button>
+    <button class="tab" data-tab="compress-img" role="tab" aria-selected="false">Compress images</button>
+  </div>
+
+  <!-- MERGE PANEL -->
+  <section class="panel active" id="panel-merge">
+    <div class="dropzone" id="dz-merge" tabindex="0">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      <p class="dz-title">Drop PDFs here, or click to browse</p>
+      <p class="dz-sub">Add two or more files, then set the order you want</p>
+      <input type="file" id="input-merge" accept="application/pdf" multiple>
+    </div>
+    <div class="filelist" id="list-merge"></div>
+    <p class="hint" id="hint-merge" style="display:none;">Drag rows by the handle to change the order pages will appear in the merged file.</p>
+    <button class="primary-btn" id="btn-merge" disabled>Merge PDFs</button>
+    <div class="status" id="status-merge"><span class="spinner"></span><span>Merging…</span></div>
+    <div class="results" id="results-merge"></div>
+  </section>
+
+  <!-- COMPRESS PDF PANEL -->
+  <section class="panel" id="panel-compress-pdf">
+    <div class="dropzone" id="dz-cpdf" tabindex="0">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      <p class="dz-title">Drop PDFs here, or click to browse</p>
+      <p class="dz-sub">One file or several — each is compressed on its own</p>
+      <input type="file" id="input-cpdf" accept="application/pdf" multiple>
+    </div>
+    <div class="filelist" id="list-cpdf"></div>
+
+    <div class="controls-row">
+      <div class="field">
+        <label>Compression level</label>
+        <div class="segmented" id="level-cpdf">
+          <button data-level="low" class="active">Light</button>
+          <button data-level="medium">Standard</button>
+          <button data-level="high">Strong</button>
+        </div>
+      </div>
+    </div>
+    <p class="hint">Pages are redrawn as compressed images, so this works best on scanned pages or image-heavy PDFs. Text becomes part of the image and is no longer selectable, and already-small text-only PDFs may not shrink further.</p>
+
+    <button class="primary-btn" id="btn-cpdf" disabled>Compress PDF</button>
+    <div class="status" id="status-cpdf"><span class="spinner"></span><span id="status-cpdf-text">Compressing…</span></div>
+    <div class="results" id="results-cpdf"></div>
+  </section>
+
+  <!-- COMPRESS IMAGES PANEL -->
+  <section class="panel" id="panel-compress-img">
+    <div class="dropzone" id="dz-img" tabindex="0">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      <p class="dz-title">Drop JPEG or PNG images here, or click to browse</p>
+      <p class="dz-sub">Batch as many as you like</p>
+      <input type="file" id="input-img" accept="image/jpeg,image/png,image/webp" multiple>
+    </div>
+    <div class="filelist" id="list-img"></div>
+
+    <div class="controls-row">
+      <div class="field">
+        <label>Quality (<span id="quality-val">70</span>%)</label>
+        <input type="range" id="quality-img" min="10" max="95" value="70">
+      </div>
+      <div class="field">
+        <label>Max dimension</label>
+        <select id="maxdim-img">
+          <option value="0">Original size</option>
+          <option value="2048">2048px</option>
+          <option value="1600" selected>1600px</option>
+          <option value="1280">1280px</option>
+          <option value="800">800px</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="primary-btn" id="btn-img" disabled>Compress images</button>
+    <div class="status" id="status-img"><span class="spinner"></span><span id="status-img-text">Compressing…</span></div>
+    <div class="results" id="results-img"></div>
+  </section>
+
+  <div class="ad-slot" id="ad-slot">Ad space</div>
+
+  <div class="footer">
+    <span>Everything happens on your device — files are never uploaded anywhere.</span>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+
+  // ---------- downloads capability ----------
+  let downloadsCap = null;
+  let downloadsChecked = false;
+  (async function(){
+    try{
+      if(window.claude && window.claude.use){
+        downloadsCap = await window.claude.use("downloads");
+      }
+    }catch(e){ downloadsCap = null; }
+    downloadsChecked = true;
+  })();
+
+  async function saveFile(filename, data){
+    // data: Blob or Uint8Array
+    const blob = (data instanceof Blob) ? data : new Blob([data]);
+    if(!downloadsChecked){
+      // wait briefly for the capability check to resolve
+      let tries = 0;
+      while(!downloadsChecked && tries < 40){ await sleep(50); tries++; }
+    }
+    if(downloadsCap){
+      try{
+        await downloadsCap.save({filename, data: blob});
+        return true;
+      }catch(e){
+        console.error("download failed", e);
+        return fallbackDownload(filename, blob);
+      }
+    }
+    return fallbackDownload(filename, blob);
+  }
+
+  function fallbackDownload(filename, blob){
+    try{
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 4000);
+      return true;
+    }catch(e){ console.error(e); return false; }
+  }
+
+  function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+  function bytesToSize(bytes){
+    if(bytes === 0) return "0 B";
+    const units = ["B","KB","MB","GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const val = bytes / Math.pow(1024, i);
+    return (i === 0 ? val : val.toFixed(1)) + " " + units[i];
+  }
+
+  function dataUrlToUint8(dataUrl){
+    const base64 = dataUrl.split(",")[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  // ---------- tabs ----------
+  const tabs = document.querySelectorAll(".tab");
+  const panels = document.querySelectorAll(".panel");
+  tabs.forEach(tab=>{
+    tab.addEventListener("click", ()=>{
+      tabs.forEach(t=>{t.classList.remove("active"); t.setAttribute("aria-selected","false");});
+      panels.forEach(p=>p.classList.remove("active"));
+      tab.classList.add("active"); tab.setAttribute("aria-selected","true");
+      document.getElementById("panel-" + tab.dataset.tab).classList.add("active");
+    });
+  });
+
+  // ---------- generic dropzone wiring ----------
+  function wireDropzone(dz, input, onFiles){
+    dz.addEventListener("click", ()=> input.click());
+    dz.addEventListener("keydown", (e)=>{ if(e.key === "Enter" || e.key === " ") input.click(); });
+    input.addEventListener("change", ()=>{ onFiles(Array.from(input.files)); input.value = ""; });
+    ["dragenter","dragover"].forEach(evt=>{
+      dz.addEventListener(evt, (e)=>{ e.preventDefault(); dz.classList.add("drag"); });
+    });
+    ["dragleave","drop"].forEach(evt=>{
+      dz.addEventListener(evt, (e)=>{ e.preventDefault(); dz.classList.remove("drag"); });
+    });
+    dz.addEventListener("drop", (e)=>{
+      const files = Array.from(e.dataTransfer.files);
+      onFiles(files);
+    });
+  }
+
+  // ================= MERGE =================
+  let mergeFiles = [];
+  const listMerge = document.getElementById("list-merge");
+  const btnMerge = document.getElementById("btn-merge");
+  const hintMerge = document.getElementById("hint-merge");
+
+  wireDropzone(document.getElementById("dz-merge"), document.getElementById("input-merge"), (files)=>{
+    const pdfs = files.filter(f => f.type === "application/pdf" || /\.pdf$/i.test(f.name));
+    mergeFiles = mergeFiles.concat(pdfs);
+    renderMergeList();
+  });
+
+  function renderMergeList(){
+    listMerge.innerHTML = "";
+    hintMerge.style.display = mergeFiles.length > 1 ? "block" : "none";
+    mergeFiles.forEach((f, idx)=>{
+      const row = document.createElement("div");
+      row.className = "file-row";
+      row.draggable = true;
+      row.dataset.idx = idx;
+      row.innerHTML = `
+        <span class="drag-handle">⠿</span>
+        <span class="file-index">${idx+1}</span>
+        <span class="file-name">${escapeHtml(f.name)}</span>
+        <span class="file-size">${bytesToSize(f.size)}</span>
+        <button class="file-remove" aria-label="Remove">✕</button>
+      `;
+      row.querySelector(".file-remove").addEventListener("click", ()=>{
+        mergeFiles.splice(idx,1); renderMergeList();
+      });
+      row.addEventListener("dragstart", (e)=>{
+        row.classList.add("dragging");
+        e.dataTransfer.setData("text/plain", idx);
+      });
+      row.addEventListener("dragend", ()=> row.classList.remove("dragging"));
+      row.addEventListener("dragover", (e)=> e.preventDefault());
+      row.addEventListener("drop", (e)=>{
+        e.preventDefault();
+        const from = parseInt(e.dataTransfer.getData("text/plain"), 10);
+        const to = idx;
+        if(from === to) return;
+        const [moved] = mergeFiles.splice(from,1);
+        mergeFiles.splice(to,0,moved);
+        renderMergeList();
+      });
+      listMerge.appendChild(row);
+    });
+    btnMerge.disabled = mergeFiles.length < 2;
+  }
+
+  btnMerge.addEventListener("click", async ()=>{
+    const statusEl = document.getElementById("status-merge");
+    const resultsEl = document.getElementById("results-merge");
+    btnMerge.disabled = true; statusEl.classList.add("active"); resultsEl.innerHTML = "";
+    try{
+      const outDoc = await PDFLib.PDFDocument.create();
+      let totalOriginal = 0;
+      for(const f of mergeFiles){
+        totalOriginal += f.size;
+        const buf = await f.arrayBuffer();
+        const srcDoc = await PDFLib.PDFDocument.load(buf, {ignoreEncryption:true});
+        const pages = await outDoc.copyPages(srcDoc, srcDoc.getPageIndices());
+        pages.forEach(p => outDoc.addPage(p));
+      }
+      const bytes = await outDoc.save();
+      const blob = new Blob([bytes], {type:"application/pdf"});
+      renderSingleResult(resultsEl, "merged.pdf", blob, totalOriginal, bytes.length, false);
+    }catch(err){
+      console.error(err);
+      resultsEl.innerHTML = `<div class="result-card">Something went wrong reading one of those PDFs. Make sure none of them are password-protected, then try again.</div>`;
+    }finally{
+      statusEl.classList.remove("active");
+      btnMerge.disabled = mergeFiles.length < 2;
+    }
+  });
+
+  // ================= COMPRESS PDF =================
+  let cpdfFiles = [];
+  let cpdfLevel = "low";
+  const listCpdf = document.getElementById("list-cpdf");
+  const btnCpdf = document.getElementById("btn-cpdf");
+  const LEVELS = {
+    low:    {scale:1.4, quality:0.82},
+    medium: {scale:1.1, quality:0.65},
+    high:   {scale:0.85, quality:0.48}
+  };
+
+  document.querySelectorAll("#level-cpdf button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll("#level-cpdf button").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      cpdfLevel = b.dataset.level;
+    });
+  });
+
+  wireDropzone(document.getElementById("dz-cpdf"), document.getElementById("input-cpdf"), (files)=>{
+    const pdfs = files.filter(f => f.type === "application/pdf" || /\.pdf$/i.test(f.name));
+    cpdfFiles = cpdfFiles.concat(pdfs);
+    renderCpdfList();
+  });
+
+  function renderCpdfList(){
+    listCpdf.innerHTML = "";
+    cpdfFiles.forEach((f, idx)=>{
+      const row = document.createElement("div");
+      row.className = "file-row";
+      row.innerHTML = `
+        <span class="file-name">${escapeHtml(f.name)}</span>
+        <span class="file-size">${bytesToSize(f.size)}</span>
+        <button class="file-remove" aria-label="Remove">✕</button>
+      `;
+      row.querySelector(".file-remove").addEventListener("click", ()=>{
+        cpdfFiles.splice(idx,1); renderCpdfList();
+      });
+      listCpdf.appendChild(row);
+    });
+    btnCpdf.disabled = cpdfFiles.length === 0;
+  }
+
+  async function compressOnePdf(file, opts){
+    const buf = await file.arrayBuffer();
+    const loadingTask = pdfjsLib.getDocument({data: buf});
+    const pdf = await loadingTask.promise;
+    const outDoc = await PDFLib.PDFDocument.create();
+    for(let i=1;i<=pdf.numPages;i++){
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({scale: opts.scale});
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(viewport.width));
+      canvas.height = Math.max(1, Math.round(viewport.height));
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      await page.render({canvasContext: ctx, viewport}).promise;
+      const dataUrl = canvas.toDataURL("image/jpeg", opts.quality);
+      const jpegBytes = dataUrlToUint8(dataUrl);
+      const jpegImage = await outDoc.embedJpg(jpegBytes);
+      const pdfPage = outDoc.addPage([canvas.width, canvas.height]);
+      pdfPage.drawImage(jpegImage, {x:0, y:0, width:canvas.width, height:canvas.height});
+    }
+    return await outDoc.save();
+  }
+
+  btnCpdf.addEventListener("click", async ()=>{
+    const statusEl = document.getElementById("status-cpdf");
+    const statusText = document.getElementById("status-cpdf-text");
+    const resultsEl = document.getElementById("results-cpdf");
+    btnCpdf.disabled = true; statusEl.classList.add("active"); resultsEl.innerHTML = "";
+    const opts = LEVELS[cpdfLevel];
+    const outputs = [];
+    for(let i=0;i<cpdfFiles.length;i++){
+      const f = cpdfFiles[i];
+      statusText.textContent = `Compressing ${i+1} of ${cpdfFiles.length}…`;
+      try{
+        const bytes = await compressOnePdf(f, opts);
+        const blob = new Blob([bytes], {type:"application/pdf"});
+        outputs.push({name: f.name.replace(/\.pdf$/i,"") + "-compressed.pdf", blob, original: f.size, final: bytes.length});
+      }catch(err){
+        console.error(err);
+        outputs.push({name: f.name, error:true});
+      }
+    }
+    statusEl.classList.remove("active");
+    btnCpdf.disabled = false;
+
+    outputs.forEach(o=>{
+      if(o.error){
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.textContent = `Couldn't compress "${o.name}" — it may be encrypted or corrupted.`;
+        resultsEl.appendChild(card);
+      }else{
+        renderSingleResult(resultsEl, o.name, o.blob, o.original, o.final, false);
+      }
+    });
+    if(outputs.filter(o=>!o.error).length > 1){
+      addZipAllButton(resultsEl, outputs.filter(o=>!o.error));
+    }
+  });
+
+  // ================= COMPRESS IMAGES =================
+  let imgFiles = [];
+  const listImg = document.getElementById("list-img");
+  const btnImg = document.getElementById("btn-img");
+  const qualitySlider = document.getElementById("quality-img");
+  const qualityVal = document.getElementById("quality-val");
+  const maxDimSelect = document.getElementById("maxdim-img");
+
+  qualitySlider.addEventListener("input", ()=>{ qualityVal.textContent = qualitySlider.value; });
+
+  wireDropzone(document.getElementById("dz-img"), document.getElementById("input-img"), (files)=>{
+    const imgs = files.filter(f => /^image\/(jpeg|png|webp)$/.test(f.type));
+    imgFiles = imgFiles.concat(imgs);
+    renderImgList();
+  });
+
+  function renderImgList(){
+    listImg.innerHTML = "";
+    imgFiles.forEach((f, idx)=>{
+      const row = document.createElement("div");
+      row.className = "file-row";
+      row.innerHTML = `
+        <span class="file-name">${escapeHtml(f.name)}</span>
+        <span class="file-size">${bytesToSize(f.size)}</span>
+        <button class="file-remove" aria-label="Remove">✕</button>
+      `;
+      row.querySelector(".file-remove").addEventListener("click", ()=>{
+        imgFiles.splice(idx,1); renderImgList();
+      });
+      listImg.appendChild(row);
+    });
+    btnImg.disabled = imgFiles.length === 0;
+  }
+
+  function compressOneImage(file, quality, maxDim){
+    return new Promise((resolve, reject)=>{
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = ()=>{
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if(maxDim > 0 && Math.max(w,h) > maxDim){
+          const scale = maxDim / Math.max(w,h);
+          w = Math.round(w*scale); h = Math.round(h*scale);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        canvas.toBlob((blob)=>{
+          URL.revokeObjectURL(url);
+          if(blob) resolve(blob); else reject(new Error("toBlob failed"));
+        }, "image/jpeg", quality);
+      };
+      img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error("image load failed")); };
+      img.src = url;
+    });
+  }
+
+  btnImg.addEventListener("click", async ()=>{
+    const statusEl = document.getElementById("status-img");
+    const statusText = document.getElementById("status-img-text");
+    const resultsEl = document.getElementById("results-img");
+    btnImg.disabled = true; statusEl.classList.add("active"); resultsEl.innerHTML = "";
+    const quality = parseInt(qualitySlider.value,10) / 100;
+    const maxDim = parseInt(maxDimSelect.value,10);
+    const outputs = [];
+    for(let i=0;i<imgFiles.length;i++){
+      const f = imgFiles[i];
+      statusText.textContent = `Compressing ${i+1} of ${imgFiles.length}…`;
+      try{
+        const blob = await compressOneImage(f, quality, maxDim);
+        const base = f.name.replace(/\.(jpe?g|png|webp)$/i,"");
+        outputs.push({name: base + "-compressed.jpg", blob, original: f.size, final: blob.size});
+      }catch(err){
+        console.error(err);
+        outputs.push({name: f.name, error:true});
+      }
+    }
+    statusEl.classList.remove("active");
+    btnImg.disabled = false;
+
+    outputs.forEach(o=>{
+      if(o.error){
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.textContent = `Couldn't process "${o.name}".`;
+        resultsEl.appendChild(card);
+      }else{
+        renderSingleResult(resultsEl, o.name, o.blob, o.original, o.final, true);
+      }
+    });
+    if(outputs.filter(o=>!o.error).length > 1){
+      addZipAllButton(resultsEl, outputs.filter(o=>!o.error));
+    }
+  });
+
+  // ---------- shared result rendering ----------
+  function renderSingleResult(container, name, blob, originalSize, finalSize, isImage){
+    const card = document.createElement("div");
+    card.className = "result-card";
+    const maxSize = Math.max(originalSize, finalSize, 1);
+    const savedPct = originalSize > 0 ? Math.round((1 - finalSize/originalSize) * 100) : 0;
+    card.innerHTML = `
+      <div class="result-head">
+        <span class="result-name">${escapeHtml(name)}</span>
+        <button class="download-btn">Download</button>
+      </div>
+      <div class="size-compare">
+        <div class="size-bar-row">
+          <span class="size-bar-label">Before</span>
+          <div class="size-bar-track"><div class="size-bar-fill" style="width:${(originalSize/maxSize*100).toFixed(1)}%"></div></div>
+          <span class="size-bar-val">${bytesToSize(originalSize)}</span>
+        </div>
+        <div class="size-bar-row">
+          <span class="size-bar-label">After</span>
+          <div class="size-bar-track"><div class="size-bar-fill after" style="width:${(finalSize/maxSize*100).toFixed(1)}%"></div></div>
+          <span class="size-bar-val">${bytesToSize(finalSize)}</span>
+        </div>
+      </div>
+      ${savedPct > 0 ? `<span class="savings-tag">${savedPct}% smaller</span>` : (originalSize ? `<span class="savings-tag">no size reduction</span>` : "")}
+    `;
+    card.querySelector(".download-btn").addEventListener("click", ()=> saveFile(name, blob));
+    container.appendChild(card);
+  }
+
+  function addZipAllButton(container, outputs){
+    const btn = document.createElement("button");
+    btn.className = "primary-btn zip-all";
+    btn.textContent = "Download all as .zip";
+    btn.addEventListener("click", async ()=>{
+      btn.disabled = true; btn.textContent = "Zipping…";
+      try{
+        const zip = new JSZip();
+        for(const o of outputs){ zip.file(o.name, o.blob); }
+        const zipBlob = await zip.generateAsync({type:"blob"});
+        await saveFile("compressed-files.zip", zipBlob);
+      }catch(e){ console.error(e); }
+      btn.disabled = false; btn.textContent = "Download all as .zip";
+    });
+    container.appendChild(btn);
+  }
+
+  function escapeHtml(str){
+    const d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+})();
+</script>
+</body>
+</html>
