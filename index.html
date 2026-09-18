@@ -121,6 +121,7 @@ button{font-family:inherit;}
   border-bottom-color:var(--accent);
   font-weight:600;
 }
+.tab-mobile{display:none;}
 
 .panel{display:none;}
 .panel.active{display:block;}
@@ -526,21 +527,54 @@ input[type="range"]{
   .nav-contact{padding:6px 11px; font-size:12px; gap:5px;}
   .tagline{font-size:13.5px; margin-bottom:22px;}
 
-  /* Touch-friendly scrollable tabs */
+  /* Touch-friendly segmented tabs — 3 equal columns, fits 100% on all phones */
   .tabs{
-    gap:0;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:3px;
+    gap:3px;
     margin-bottom:22px;
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
+    overflow:hidden;
   }
-  .tabs::-webkit-scrollbar{display:none;}
   .tab{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:8px 3px;
+    margin-right:0;
+    font-size:12.5px;
+    border-radius:6px;
+    border-bottom:none;
+    transform:none;
+    color:var(--muted);
+    font-weight:500;
     white-space:nowrap;
-    flex-shrink:0;
-    padding:10px 12px;
-    margin-right:6px;
-    font-size:13.5px;
+    transition:background 0.15s, color 0.15s, box-shadow 0.15s;
+  }
+  .tab:hover{color:var(--ink);}
+  .tab.active{
+    background:var(--surface);
+    color:var(--ink);
+    font-weight:600;
+    box-shadow:0 1px 3px rgba(0,0,0,0.08);
+    border-bottom:none;
+  }
+  .tab-desktop{display:none;}
+  .tab-mobile{display:inline;}
+
+  /* Full-width thumb-friendly primary action buttons */
+  .primary-btn{
+    width:100%;
+    box-sizing:border-box;
+    text-align:center;
+    justify-content:center;
+    padding:13px 16px;
+    font-size:15px;
+    margin-top:18px;
   }
 
   /* Compact dropzone for mobile */
@@ -635,9 +669,18 @@ input[type="range"]{
   <p class="tagline">Merge any file format — PDF, Word, images — and export to PDF or DOCX. Right in your browser.</p>
 
   <div class="tabs" role="tablist">
-    <button class="tab active" data-tab="merge" role="tab" aria-selected="true">Merge Files</button>
-    <button class="tab" data-tab="compress-pdf" role="tab" aria-selected="false">Compress PDF</button>
-    <button class="tab" data-tab="compress-img" role="tab" aria-selected="false">Compress images</button>
+    <button class="tab active" data-tab="merge" role="tab" aria-selected="true">
+      <span class="tab-desktop">Merge Files</span>
+      <span class="tab-mobile">Merge Files</span>
+    </button>
+    <button class="tab" data-tab="compress-pdf" role="tab" aria-selected="false">
+      <span class="tab-desktop">Compress PDF</span>
+      <span class="tab-mobile">Compress PDF</span>
+    </button>
+    <button class="tab" data-tab="compress-img" role="tab" aria-selected="false">
+      <span class="tab-desktop">Compress images</span>
+      <span class="tab-mobile">Compress Img</span>
+    </button>
   </div>
 
   <!-- ===== MERGE FILES PANEL ===== -->
