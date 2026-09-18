@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Merge, compress and convert PDF, Word DOCX, and image files right in your browser. No uploads, no installs.">
 <meta name="google-adsense-account" content="ca-pub-6120283129571228">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6120283129571228" crossorigin="anonymous"></script>
-<title>PDF Merger</title>
+<title>PDF Merger — Merge &amp; Convert Files</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
@@ -131,6 +132,7 @@ button{font-family:inherit;}
   padding:36px 20px;
   text-align:center;
   cursor:pointer;
+  transition:border-color 0.15s, background 0.15s;
 }
 .dropzone.drag{
   border-color:var(--accent);
@@ -144,6 +146,26 @@ button{font-family:inherit;}
 .dropzone p{margin:0;font-size:14.5px;}
 .dropzone .dz-title{font-weight:500;color:var(--ink);}
 .dropzone .dz-sub{color:var(--muted); font-size:13px; margin-top:4px;}
+
+/* supported format pills inside dropzone */
+.format-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:center;
+  margin-top:12px;
+}
+.format-pill{
+  font-size:11px;
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-weight:500;
+  padding:2px 8px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  background:var(--surface-2);
+}
+
 input[type="file"]{display:none;}
 
 .filelist{
@@ -160,6 +182,7 @@ input[type="file"]{display:none;}
   border:1px solid var(--line);
   border-radius:var(--radius);
   padding:11px 12px;
+  transition:opacity 0.15s;
 }
 .file-row.dragging{opacity:0.4;}
 .drag-handle{
@@ -177,6 +200,30 @@ input[type="file"]{display:none;}
   width:18px;
   flex-shrink:0;
 }
+
+/* file type badge */
+.file-badge{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:10px;
+  font-weight:500;
+  padding:2px 6px;
+  border-radius:5px;
+  flex-shrink:0;
+  letter-spacing:0.03em;
+  text-transform:uppercase;
+}
+.badge-pdf{ background:#fde8e4; color:#b33f30; }
+.badge-docx{ background:#e4ecfd; color:#2a52b3; }
+.badge-img{ background:#e4fdf0; color:#1e7a44; }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .badge-pdf{ background:#3a1a16; color:#e2695a; }
+  :root:not([data-theme="light"]) .badge-docx{ background:#162038; color:#6b8fe2; }
+  :root:not([data-theme="light"]) .badge-img{ background:#0e2a1a; color:#4fc878; }
+}
+:root[data-theme="dark"] .badge-pdf{ background:#3a1a16; color:#e2695a; }
+:root[data-theme="dark"] .badge-docx{ background:#162038; color:#6b8fe2; }
+:root[data-theme="dark"] .badge-img{ background:#0e2a1a; color:#4fc878; }
+
 .file-name{
   flex:1;
   min-width:0;
@@ -243,6 +290,7 @@ select{
   font-size:13.5px;
   cursor:pointer;
   border-right:1px solid var(--line);
+  transition:background 0.12s, color 0.12s;
 }
 .segmented button:last-child{border-right:none;}
 .segmented button.active{
@@ -271,6 +319,7 @@ input[type="range"]{
   font-weight:600;
   cursor:pointer;
   margin-top:22px;
+  transition:background 0.12s;
 }
 .primary-btn:hover{background:var(--accent-strong);}
 .primary-btn:disabled{
@@ -333,6 +382,7 @@ input[type="range"]{
   font-size:13px;
   cursor:pointer;
   flex-shrink:0;
+  transition:border-color 0.12s, color 0.12s;
 }
 .download-btn:hover{border-color:var(--accent); color:var(--accent-strong);}
 .size-compare{display:flex; flex-direction:column; gap:5px;}
@@ -403,6 +453,18 @@ input[type="range"]{
   gap:8px;
 }
 
+/* conversion note banner */
+.conv-note{
+  margin-top:14px;
+  padding:10px 14px;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:8px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.55;
+}
+
 @media (max-width:480px){
   .wrap{padding:28px 16px 60px;}
   .wordmark{font-size:22px;}
@@ -420,30 +482,53 @@ input[type="range"]{
   <div class="masthead">
     <p class="wordmark">PDF Merger<span class="dot">.</span></p>
   </div>
-  <p class="tagline">Merge, shrink and clean up PDFs and images — right in your browser.</p>
+  <p class="tagline">Merge any file format — PDF, Word, images — and export to PDF or DOCX. Right in your browser.</p>
 
   <div class="tabs" role="tablist">
-    <button class="tab active" data-tab="merge" role="tab" aria-selected="true">Merge PDFs</button>
+    <button class="tab active" data-tab="merge" role="tab" aria-selected="true">Merge Files</button>
     <button class="tab" data-tab="compress-pdf" role="tab" aria-selected="false">Compress PDF</button>
     <button class="tab" data-tab="compress-img" role="tab" aria-selected="false">Compress images</button>
   </div>
 
-  <!-- MERGE PANEL -->
+  <!-- ===== MERGE FILES PANEL ===== -->
   <section class="panel active" id="panel-merge">
     <div class="dropzone" id="dz-merge" tabindex="0">
       <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-      <p class="dz-title">Drop PDFs here, or click to browse</p>
-      <p class="dz-sub">Add two or more files, then set the order you want</p>
-      <input type="file" id="input-merge" accept="application/pdf" multiple>
+      <p class="dz-title">Drop files here, or click to browse</p>
+      <p class="dz-sub">Mix PDFs, Word docs, and images in any order</p>
+      <div class="format-pills">
+        <span class="format-pill">PDF</span>
+        <span class="format-pill">DOCX</span>
+        <span class="format-pill">DOC</span>
+        <span class="format-pill">JPG</span>
+        <span class="format-pill">PNG</span>
+        <span class="format-pill">WEBP</span>
+      </div>
+      <input type="file" id="input-merge" accept="application/pdf,.docx,.doc,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/webp" multiple>
     </div>
     <div class="filelist" id="list-merge"></div>
-    <p class="hint" id="hint-merge" style="display:none;">Drag rows by the handle to change the order pages will appear in the merged file.</p>
-    <button class="primary-btn" id="btn-merge" disabled>Merge PDFs</button>
-    <div class="status" id="status-merge"><span class="spinner"></span><span>Merging…</span></div>
+    <p class="hint" id="hint-merge" style="display:none;">Drag rows by the ⠿ handle to change the order they will appear in the output.</p>
+
+    <div class="controls-row" style="margin-top:20px;">
+      <div class="field">
+        <label>Output format</label>
+        <div class="segmented" id="output-format-seg">
+          <button data-fmt="pdf" class="active" id="fmt-pdf">PDF</button>
+          <button data-fmt="docx" id="fmt-docx">DOCX</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="conv-note" id="merge-conv-note">
+      <strong>PDF output:</strong> PDFs are merged losslessly. Word docs and images are rasterised and embedded as pages.
+    </div>
+
+    <button class="primary-btn" id="btn-merge" disabled>Merge &amp; Export</button>
+    <div class="status" id="status-merge"><span class="spinner"></span><span id="status-merge-text">Processing…</span></div>
     <div class="results" id="results-merge"></div>
   </section>
 
-  <!-- COMPRESS PDF PANEL -->
+  <!-- ===== COMPRESS PDF PANEL ===== -->
   <section class="panel" id="panel-compress-pdf">
     <div class="dropzone" id="dz-cpdf" tabindex="0">
       <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
@@ -470,7 +555,7 @@ input[type="range"]{
     <div class="results" id="results-cpdf"></div>
   </section>
 
-  <!-- COMPRESS IMAGES PANEL -->
+  <!-- ===== COMPRESS IMAGES PANEL ===== -->
   <section class="panel" id="panel-compress-img">
     <div class="dropzone" id="dz-img" tabindex="0">
       <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
@@ -510,15 +595,20 @@ input[type="range"]{
 
 </div>
 
+<!-- ===== LIBRARIES ===== -->
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
+
 <script>
 (function(){
   "use strict";
   pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
 
-  // ---------- downloads capability ----------
+  // ---------- download capability ----------
   let downloadsCap = null;
   let downloadsChecked = false;
   (async function(){
@@ -531,10 +621,8 @@ input[type="range"]{
   })();
 
   async function saveFile(filename, data){
-    // data: Blob or Uint8Array
     const blob = (data instanceof Blob) ? data : new Blob([data]);
     if(!downloadsChecked){
-      // wait briefly for the capability check to resolve
       let tries = 0;
       while(!downloadsChecked && tries < 40){ await sleep(50); tries++; }
     }
@@ -579,6 +667,27 @@ input[type="range"]{
     return bytes;
   }
 
+  function fileType(file){
+    const name = file.name.toLowerCase();
+    if(file.type === "application/pdf" || name.endsWith(".pdf")) return "pdf";
+    if(name.endsWith(".docx") || file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") return "docx";
+    if(name.endsWith(".doc") || file.type === "application/msword") return "doc";
+    if(/^image\/(jpeg|png|webp)$/.test(file.type) || /\.(jpg|jpeg|png|webp)$/i.test(name)) return "img";
+    return "unknown";
+  }
+
+  function badgeClass(type){
+    if(type === "pdf") return "badge-pdf";
+    if(type === "docx" || type === "doc") return "badge-docx";
+    return "badge-img";
+  }
+  function badgeLabel(type){
+    if(type === "docx") return "DOCX";
+    if(type === "doc") return "DOC";
+    if(type === "img") return "IMG";
+    return type.toUpperCase();
+  }
+
   // ---------- tabs ----------
   const tabs = document.querySelectorAll(".tab");
   const panels = document.querySelectorAll(".panel");
@@ -591,7 +700,7 @@ input[type="range"]{
     });
   });
 
-  // ---------- generic dropzone wiring ----------
+  // ---------- generic dropzone ----------
   function wireDropzone(dz, input, onFiles){
     dz.addEventListener("click", ()=> input.click());
     dz.addEventListener("keydown", (e)=>{ if(e.key === "Enter" || e.key === " ") input.click(); });
@@ -608,15 +717,41 @@ input[type="range"]{
     });
   }
 
-  // ================= MERGE =================
+  // =====================================================
+  // ============== MERGE FILES ==========================
+  // =====================================================
   let mergeFiles = [];
-  const listMerge = document.getElementById("list-merge");
-  const btnMerge = document.getElementById("btn-merge");
-  const hintMerge = document.getElementById("hint-merge");
+  let mergeOutputFmt = "pdf"; // "pdf" or "docx"
+
+  const listMerge      = document.getElementById("list-merge");
+  const btnMerge       = document.getElementById("btn-merge");
+  const hintMerge      = document.getElementById("hint-merge");
+  const statusMerge    = document.getElementById("status-merge");
+  const statusMergeText= document.getElementById("status-merge-text");
+  const resultsMerge   = document.getElementById("results-merge");
+  const convNote       = document.getElementById("merge-conv-note");
+
+  // Output format switcher
+  document.querySelectorAll("#output-format-seg button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll("#output-format-seg button").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      mergeOutputFmt = b.dataset.fmt;
+      updateConvNote();
+    });
+  });
+
+  function updateConvNote(){
+    if(mergeOutputFmt === "pdf"){
+      convNote.innerHTML = "<strong>PDF output:</strong> PDFs are merged losslessly. Word docs and images are rasterised and embedded as pages.";
+    } else {
+      convNote.innerHTML = "<strong>DOCX output:</strong> All content is converted to HTML and packaged into a single Word document. Formatting may vary.";
+    }
+  }
 
   wireDropzone(document.getElementById("dz-merge"), document.getElementById("input-merge"), (files)=>{
-    const pdfs = files.filter(f => f.type === "application/pdf" || /\.pdf$/i.test(f.name));
-    mergeFiles = mergeFiles.concat(pdfs);
+    const accepted = files.filter(f => fileType(f) !== "unknown");
+    mergeFiles = mergeFiles.concat(accepted);
     renderMergeList();
   });
 
@@ -624,6 +759,7 @@ input[type="range"]{
     listMerge.innerHTML = "";
     hintMerge.style.display = mergeFiles.length > 1 ? "block" : "none";
     mergeFiles.forEach((f, idx)=>{
+      const type = fileType(f);
       const row = document.createElement("div");
       row.className = "file-row";
       row.draggable = true;
@@ -631,6 +767,7 @@ input[type="range"]{
       row.innerHTML = `
         <span class="drag-handle">⠿</span>
         <span class="file-index">${idx+1}</span>
+        <span class="file-badge ${badgeClass(type)}">${badgeLabel(type)}</span>
         <span class="file-name">${escapeHtml(f.name)}</span>
         <span class="file-size">${bytesToSize(f.size)}</span>
         <button class="file-remove" aria-label="Remove">✕</button>
@@ -658,33 +795,219 @@ input[type="range"]{
     btnMerge.disabled = mergeFiles.length < 2;
   }
 
-  btnMerge.addEventListener("click", async ()=>{
-    const statusEl = document.getElementById("status-merge");
-    const resultsEl = document.getElementById("results-merge");
-    btnMerge.disabled = true; statusEl.classList.add("active"); resultsEl.innerHTML = "";
-    try{
-      const outDoc = await PDFLib.PDFDocument.create();
-      let totalOriginal = 0;
-      for(const f of mergeFiles){
-        totalOriginal += f.size;
+  // ---- helpers: file → content for each path ----
+
+  /** Render a PDF page to a JPEG dataURL using pdf.js */
+  async function pdfPageToJpegDataUrl(pdfPage, scale){
+    const viewport = pdfPage.getViewport({scale});
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(viewport.width));
+    canvas.height = Math.max(1, Math.round(viewport.height));
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    await pdfPage.render({canvasContext: ctx, viewport}).promise;
+    return {dataUrl: canvas.toDataURL("image/jpeg", 0.82), w: canvas.width, h: canvas.height};
+  }
+
+  /** Convert a DOCX/DOC file to an HTML string using mammoth */
+  async function docxToHtml(file){
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.convertToHtml({arrayBuffer});
+    return result.value; // HTML string
+  }
+
+  /** Render an HTML string to a canvas using html2canvas */
+  async function htmlToCanvas(htmlStr){
+    const container = document.createElement("div");
+    container.style.cssText = [
+      "position:fixed","left:-9999px","top:0",
+      "width:794px","background:#fff","color:#111",
+      "font-family:serif","font-size:15px","padding:48px",
+      "box-sizing:border-box","line-height:1.6"
+    ].join(";");
+    container.innerHTML = htmlStr;
+    document.body.appendChild(container);
+    await sleep(120); // let browser lay out
+    const canvas = await html2canvas(container, {
+      scale: 1.5,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      logging: false
+    });
+    document.body.removeChild(container);
+    return canvas;
+  }
+
+  /** Load an image file and return a canvas */
+  function imageFileToCanvas(file){
+    return new Promise((resolve, reject)=>{
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = ()=>{
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        canvas.getContext("2d").drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        resolve(canvas);
+      };
+      img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error("image load failed")); };
+      img.src = url;
+    });
+  }
+
+  /** Canvas → JPEG Uint8Array */
+  function canvasToJpegBytes(canvas, quality){
+    const dataUrl = canvas.toDataURL("image/jpeg", quality || 0.85);
+    return dataUrlToUint8(dataUrl);
+  }
+
+  // ==================== PDF OUTPUT PATH ====================
+
+  async function mergeAsPdf(files, onProgress){
+    const outDoc = await PDFLib.PDFDocument.create();
+    let totalOriginal = 0;
+
+    for(let i = 0; i < files.length; i++){
+      const f = files[i];
+      totalOriginal += f.size;
+      const type = fileType(f);
+      onProgress(`Processing file ${i+1} of ${files.length} (${f.name})…`);
+
+      if(type === "pdf"){
+        // lossless copy
         const buf = await f.arrayBuffer();
-        const srcDoc = await PDFLib.PDFDocument.load(buf, {ignoreEncryption:true});
+        const srcDoc = await PDFLib.PDFDocument.load(buf, {ignoreEncryption: true});
         const pages = await outDoc.copyPages(srcDoc, srcDoc.getPageIndices());
         pages.forEach(p => outDoc.addPage(p));
+
+      } else if(type === "docx" || type === "doc"){
+        // DOCX → HTML → canvas → jpeg → pdf page
+        const htmlStr = await docxToHtml(f);
+        const canvas = await htmlToCanvas(htmlStr);
+        const jpegBytes = canvasToJpegBytes(canvas, 0.85);
+        const jpegImg = await outDoc.embedJpg(jpegBytes);
+        // split into A4-ish page heights
+        const pageW = canvas.width;
+        const pageH = canvas.height;
+        const a4h = Math.round(pageW * 1.414);
+        let y = 0;
+        while(y < pageH){
+          const sliceH = Math.min(a4h, pageH - y);
+          // crop canvas slice
+          const sliceCanvas = document.createElement("canvas");
+          sliceCanvas.width = pageW;
+          sliceCanvas.height = sliceH;
+          sliceCanvas.getContext("2d").drawImage(canvas, 0, y, pageW, sliceH, 0, 0, pageW, sliceH);
+          const sliceBytes = canvasToJpegBytes(sliceCanvas, 0.85);
+          const sliceImg = await outDoc.embedJpg(sliceBytes);
+          const page = outDoc.addPage([pageW, sliceH]);
+          page.drawImage(sliceImg, {x:0, y:0, width:pageW, height:sliceH});
+          y += sliceH;
+        }
+
+      } else if(type === "img"){
+        // image → canvas → jpeg → pdf page
+        const canvas = await imageFileToCanvas(f);
+        const jpegBytes = canvasToJpegBytes(canvas, 0.9);
+        const jpegImg = await outDoc.embedJpg(jpegBytes);
+        const page = outDoc.addPage([canvas.width, canvas.height]);
+        page.drawImage(jpegImg, {x:0, y:0, width:canvas.width, height:canvas.height});
       }
-      const bytes = await outDoc.save();
-      const blob = new Blob([bytes], {type:"application/pdf"});
-      renderSingleResult(resultsEl, "merged.pdf", blob, totalOriginal, bytes.length, false);
-    }catch(err){
+    }
+
+    const bytes = await outDoc.save();
+    return {bytes, totalOriginal};
+  }
+
+  // ==================== DOCX OUTPUT PATH ====================
+
+  async function mergeAsDocx(files, onProgress){
+    let totalOriginal = 0;
+    // We build one big HTML document and convert via html-docx-js
+    let bodyParts = [];
+
+    for(let i = 0; i < files.length; i++){
+      const f = files[i];
+      totalOriginal += f.size;
+      const type = fileType(f);
+      onProgress(`Processing file ${i+1} of ${files.length} (${f.name})…`);
+
+      if(i > 0){
+        // page break between files
+        bodyParts.push('<p style="page-break-before:always;"></p>');
+      }
+
+      if(type === "pdf"){
+        // PDF → render each page as image → embed as <img> in HTML
+        const buf = await f.arrayBuffer();
+        const loadingTask = pdfjsLib.getDocument({data: buf});
+        const pdf = await loadingTask.promise;
+        for(let pg = 1; pg <= pdf.numPages; pg++){
+          const page = await pdf.getPage(pg);
+          const {dataUrl} = await pdfPageToJpegDataUrl(page, 1.2);
+          bodyParts.push(`<p><img src="${dataUrl}" style="max-width:100%;display:block;margin:0 auto;" /></p>`);
+          if(pg < pdf.numPages) bodyParts.push('<p style="page-break-before:always;"></p>');
+        }
+
+      } else if(type === "docx" || type === "doc"){
+        const htmlStr = await docxToHtml(f);
+        bodyParts.push(htmlStr);
+
+      } else if(type === "img"){
+        const url = URL.createObjectURL(f);
+        // read as data URL to embed
+        const dataUrl = await new Promise((res, rej)=>{
+          const reader = new FileReader();
+          reader.onload = ()=> res(reader.result);
+          reader.onerror = rej;
+          reader.readAsDataURL(f);
+        });
+        URL.revokeObjectURL(url);
+        bodyParts.push(`<p><img src="${dataUrl}" style="max-width:100%;display:block;margin:0 auto;" /></p>`);
+      }
+    }
+
+    const fullHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${bodyParts.join("\n")}</body></html>`;
+    const docxBlob = htmlDocx.asBlob(fullHtml, {
+      orientation: "portrait",
+      margins: {top: 720, right: 720, bottom: 720, left: 720}
+    });
+    return {blob: docxBlob, totalOriginal};
+  }
+
+  // ==================== MERGE BUTTON ====================
+
+  btnMerge.addEventListener("click", async ()=>{
+    btnMerge.disabled = true;
+    statusMerge.classList.add("active");
+    resultsMerge.innerHTML = "";
+
+    try{
+      if(mergeOutputFmt === "pdf"){
+        const {bytes, totalOriginal} = await mergeAsPdf(mergeFiles, t => statusMergeText.textContent = t);
+        const blob = new Blob([bytes], {type:"application/pdf"});
+        renderSingleResult(resultsMerge, "merged.pdf", blob, totalOriginal, bytes.length, false);
+      } else {
+        const {blob, totalOriginal} = await mergeAsDocx(mergeFiles, t => statusMergeText.textContent = t);
+        renderSingleResult(resultsMerge, "merged.docx", blob, totalOriginal, blob.size, false);
+      }
+    } catch(err){
       console.error(err);
-      resultsEl.innerHTML = `<div class="result-card">Something went wrong reading one of those PDFs. Make sure none of them are password-protected, then try again.</div>`;
-    }finally{
-      statusEl.classList.remove("active");
+      const card = document.createElement("div");
+      card.className = "result-card";
+      card.textContent = `Something went wrong: ${err.message || "Unknown error"}. Check the console for details.`;
+      resultsMerge.appendChild(card);
+    } finally{
+      statusMerge.classList.remove("active");
       btnMerge.disabled = mergeFiles.length < 2;
     }
   });
 
-  // ================= COMPRESS PDF =================
+  // =====================================================
+  // ============== COMPRESS PDF =========================
+  // =====================================================
   let cpdfFiles = [];
   let cpdfLevel = "low";
   const listCpdf = document.getElementById("list-cpdf");
@@ -788,7 +1111,9 @@ input[type="range"]{
     }
   });
 
-  // ================= COMPRESS IMAGES =================
+  // =====================================================
+  // ============== COMPRESS IMAGES ======================
+  // =====================================================
   let imgFiles = [];
   const listImg = document.getElementById("list-img");
   const btnImg = document.getElementById("btn-img");
@@ -884,7 +1209,9 @@ input[type="range"]{
     }
   });
 
-  // ---------- shared result rendering ----------
+  // =====================================================
+  // ============== SHARED HELPERS =======================
+  // =====================================================
   function renderSingleResult(container, name, blob, originalSize, finalSize, isImage){
     const card = document.createElement("div");
     card.className = "result-card";
