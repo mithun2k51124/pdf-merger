@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="About Mithun Gowda — the developer behind PDF Merger. Contact, GitHub, and open-source projects.">
+<meta name="description" content="About Mithun Gowda — developer of PDF Merger. Contact, GitHub, and open-source projects.">
 <meta name="google-adsense-account" content="ca-pub-6120283129571228">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6120283129571228" crossorigin="anonymous"></script>
-<title>About &amp; Contact — PDF Merger</title>
+<title>About &amp; Contact — Mithun Gowda</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fira+Code:wght@400;500&display=swap');
 
@@ -20,433 +20,381 @@
   --accent:#2F6B5E;
   --accent-strong:#234F45;
   --accent-ink:#FDFBF9;
-  --danger:#B33F30;
   --radius:10px;
-  --shadow:0 1px 2px rgba(20,18,15,0.06);
 }
-@media (prefers-color-scheme: dark){
+@media(prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#1B1A18;
-    --surface:#242220;
-    --surface-2:#2B2926;
-    --ink:#EDEAE5;
-    --muted:#9C978F;
-    --line:#3A3733;
-    --accent:#4F9C89;
-    --accent-strong:#6BB6A2;
-    --accent-ink:#0E1512;
-    --danger:#E2695A;
-    --shadow:0 1px 2px rgba(0,0,0,0.3);
+    --bg:#1B1A18; --surface:#242220; --surface-2:#2B2926;
+    --ink:#EDEAE5; --muted:#9C978F; --line:#3A3733;
+    --accent:#4F9C89; --accent-strong:#6BB6A2; --accent-ink:#0E1512;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#1B1A18;
-  --surface:#242220;
-  --surface-2:#2B2926;
-  --ink:#EDEAE5;
-  --muted:#9C978F;
-  --line:#3A3733;
-  --accent:#4F9C89;
-  --accent-strong:#6BB6A2;
-  --accent-ink:#0E1512;
-  --danger:#E2695A;
-  --shadow:0 1px 2px rgba(0,0,0,0.3);
+  --bg:#1B1A18; --surface:#242220; --surface-2:#2B2926;
+  --ink:#EDEAE5; --muted:#9C978F; --line:#3A3733;
+  --accent:#4F9C89; --accent-strong:#6BB6A2; --accent-ink:#0E1512;
 }
 
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
-  background:var(--bg);
-  color:var(--ink);
-  font-family:'Inter', system-ui, -apple-system, sans-serif;
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-}
-@media (prefers-reduced-motion: reduce){
-  *{transition:none !important; animation:none !important;}
-}
-a{color:inherit;}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+@media(prefers-reduced-motion:reduce){ *{ transition:none!important; animation:none!important; } }
+a{ color:inherit; text-decoration:none; }
 
-.wrap{
-  max-width:680px;
-  margin:0 auto;
-  padding:40px 20px 80px;
-}
+/* ── Layout ── */
+.wrap{ max-width:680px; margin:0 auto; padding:40px 20px 80px; }
 
-/* ---- Masthead / back nav ---- */
-.masthead{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  margin-bottom:32px;
-}
-.wordmark{
-  font-family:'Space Grotesk', system-ui, sans-serif;
-  font-weight:700;
-  font-size:26px;
-  letter-spacing:-0.01em;
-  margin:0;
-  text-decoration:none;
-  color:var(--ink);
-}
-.wordmark .dot{color:var(--accent);}
+/* ── Masthead ── */
+.masthead{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:32px; }
+.wordmark{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:26px; letter-spacing:-0.01em; color:var(--ink); }
+.wordmark .dot{ color:var(--accent); }
 .back-btn{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  background:var(--surface);
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--surface); border:1px solid var(--line); border-radius:7px;
+  padding:7px 13px; font-size:13px; font-weight:500; color:var(--muted);
+  transition:border-color .15s, color .15s, background .15s;
+}
+.back-btn:hover{ border-color:var(--accent); color:var(--accent); background:var(--surface-2); }
+
+/* ── Hero: portrait photo + info card ── */
+.hero{
+  display:grid;
+  grid-template-columns: 210px 1fr;
+  gap:18px;
+  margin-bottom:16px;
+  align-items:stretch;
+}
+.hero-photo{
+  border-radius:var(--radius);
+  overflow:hidden;
   border:1px solid var(--line);
-  border-radius:7px;
-  padding:7px 13px;
-  font-size:13px;
-  font-weight:500;
-  color:var(--muted);
-  text-decoration:none;
-  transition:border-color 0.15s, color 0.15s;
-  flex-shrink:0;
+  aspect-ratio:3/4;
+  background:var(--surface-2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
 }
-.back-btn:hover{
-  border-color:var(--accent);
-  color:var(--accent);
+.hero-photo img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:center bottom;
+  display:block;
+  transition:transform .4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.hero-photo:hover img{ transform:scale(1.03); }
 
-/* ---- Page heading ---- */
-.page-title{
-  font-family:'Space Grotesk', system-ui, sans-serif;
-  font-size:28px;
-  font-weight:700;
-  letter-spacing:-0.02em;
-  margin:0 0 4px;
-}
-.page-sub{
-  color:var(--muted);
-  font-size:14px;
-  margin:0 0 36px;
-}
-
-/* ---- Cards ---- */
-.card{
+.hero-card{
   background:var(--surface);
   border:1px solid var(--line);
   border-radius:var(--radius);
-  padding:24px;
-  margin-bottom:18px;
+  padding:24px 26px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+}
+.hero-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:28px; font-weight:700; letter-spacing:-0.02em; color:var(--ink);
+  line-height:1.15;
+}
+.hero-tag{
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:13px; color:var(--muted); font-weight:500;
+}
+.hero-dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+.hero-desc{
+  font-size:13.5px; color:var(--muted); line-height:1.65;
+  padding-top:10px; border-top:1px solid var(--line);
+}
+.hero-desc strong{ color:var(--ink); font-weight:600; }
+
+/* ── Cards ── */
+.card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:22px 24px; margin-bottom:16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
 }
 .card-label{
-  font-family:'IBM Plex Mono', ui-monospace, monospace;
-  font-size:11px;
-  font-weight:500;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin:0 0 14px;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:14px;
 }
 
-/* ---- Avatar + name block ---- */
-.profile-row{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  margin-bottom:18px;
-}
-.avatar{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  background:var(--accent);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-  font-family:'Space Grotesk', sans-serif;
-  font-size:22px;
-  font-weight:700;
-  color:var(--accent-ink);
-  letter-spacing:-0.02em;
-}
-.profile-name{
-  font-family:'Space Grotesk', system-ui, sans-serif;
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:-0.01em;
-  margin:0 0 3px;
-}
-.profile-edu{
-  font-size:13.5px;
-  color:var(--muted);
-  margin:0;
-}
-
-.about-text{
-  font-size:14px;
-  color:var(--muted);
-  line-height:1.7;
-  margin:0 0 18px;
-}
-.about-text strong{color:var(--ink); font-weight:600;}
-
-/* ---- GitHub link ---- */
+/* ── GitHub link ── */
 .github-link{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  background:var(--surface-2);
-  border:1px solid var(--line);
-  border-radius:8px;
-  padding:10px 16px;
-  text-decoration:none;
-  color:var(--ink);
-  transition:border-color 0.15s, background 0.15s;
-  width:100%;
+  display:flex; align-items:center; gap:14px;
+  background:var(--surface-2); border:1px solid var(--line); border-radius:8px;
+  padding:14px 18px; transition:border-color .15s, background .15s, transform .15s;
 }
-.github-link:hover{
+.github-link:hover{ border-color:var(--accent); background:var(--bg); transform:translateY(-1px); }
+.github-handle{
+  font-family:'Fira Code','IBM Plex Mono',monospace;
+  font-size:16px; font-weight:500; color:var(--accent-strong); letter-spacing:-.01em;
+}
+.github-subdesc{ font-size:12px; color:var(--muted); margin-top:2px; }
+.github-arrow{ margin-left:auto; color:var(--muted); flex-shrink:0; }
+
+/* ── Contact Section with guaranteed working Email actions ── */
+.email-container{ display:flex; flex-direction:column; gap:12px; }
+
+.email-btn{
+  display:flex; align-items:center; gap:12px;
+  background:var(--accent); border-radius:8px; padding:14px 18px;
+  color:var(--accent-ink); text-decoration:none;
+  cursor:pointer;
+  transition:background .15s, transform .15s;
+  box-shadow:0 2px 10px rgba(47,107,94,0.2);
+}
+.email-btn:hover{
+  background:var(--accent-strong);
+  transform:translateY(-1px);
+}
+.email-btn-text{
+  display:flex; flex-direction:column; gap:1px;
+}
+.email-btn-title{ font-size:14.5px; font-weight:600; line-height:1.2; }
+.email-btn-sub{ font-size:11.5px; opacity:0.85; font-weight:400; }
+
+.email-mono{
+  font-family:'Fira Code','IBM Plex Mono',monospace;
+  font-size:12.5px; font-weight:400; opacity:.92; margin-left:auto;
+}
+
+.email-actions-bar{
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.action-pill{
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--surface-2); border:1px solid var(--line);
+  border-radius:7px; padding:8px 14px; font-size:12.5px;
+  font-weight:500; color:var(--ink); text-decoration:none;
+  cursor:pointer; font-family:inherit;
+  transition:border-color .15s, background .15s, color .15s;
+}
+.action-pill:hover{
   border-color:var(--accent);
   background:var(--bg);
+  color:var(--accent);
 }
-.github-icon{
-  flex-shrink:0;
-  color:var(--ink);
-}
-.github-text{
-  display:flex;
-  flex-direction:column;
-  gap:1px;
-}
-.github-handle{
-  font-family:'Fira Code', 'IBM Plex Mono', ui-monospace, monospace;
-  font-size:15px;
-  font-weight:500;
-  color:var(--accent-strong);
-  letter-spacing:-0.01em;
-}
-.github-desc{
-  font-size:12px;
-  color:var(--muted);
-}
-.github-arrow{
-  margin-left:auto;
-  color:var(--muted);
-  flex-shrink:0;
-}
-
-/* ---- Email button ---- */
-.email-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
+.action-pill.copied{
+  border-color:var(--accent);
   background:var(--accent);
-  border:none;
-  border-radius:8px;
-  padding:12px 20px;
-  text-decoration:none;
   color:var(--accent-ink);
-  font-size:14.5px;
-  font-weight:600;
-  cursor:pointer;
-  width:100%;
-  transition:background 0.15s;
 }
-.email-btn:hover{background:var(--accent-strong);}
-.email-address{
-  font-family:'IBM Plex Mono', ui-monospace, monospace;
-  font-size:13px;
-  font-weight:400;
-  opacity:0.85;
-  margin-left:auto;
+.email-hint{
+  font-size:12px; color:var(--muted); line-height:1.5; margin-top:2px;
 }
 
-/* ---- Divider ---- */
-.divider{
-  height:1px;
-  background:var(--line);
-  margin:20px 0;
-}
-
-/* ---- Projects ---- */
-.project-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+/* ── Projects ── */
+.project-list{ display:flex; flex-direction:column; gap:10px; }
 .project-item{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  padding:12px 14px;
-  background:var(--surface-2);
-  border-radius:8px;
-  border:1px solid var(--line);
+  display:flex; align-items:flex-start; gap:12px;
+  padding:14px 16px; background:var(--surface-2);
+  border:1px solid var(--line); border-radius:8px;
 }
-.project-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--accent);
-  flex-shrink:0;
-  margin-top:5px;
-}
-.project-info{}
-.project-name{
-  font-weight:600;
-  font-size:14px;
-  margin:0 0 2px;
-}
-.project-desc{
-  font-size:12.5px;
-  color:var(--muted);
-  margin:0;
-}
-.open-source-tag{
-  display:inline-block;
-  margin-top:14px;
-  font-family:'IBM Plex Mono', ui-monospace, monospace;
-  font-size:11px;
-  font-weight:500;
-  letter-spacing:0.04em;
-  background:var(--surface-2);
-  color:var(--accent-strong);
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:3px 10px;
+.project-dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0; margin-top:5px; }
+.project-name{ font-weight:600; font-size:14px; }
+.project-desc{ font-size:12.5px; color:var(--muted); margin-top:3px; line-height:1.55; }
+.oss-tag{
+  display:inline-block; margin-top:14px;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.04em; background:var(--surface-2);
+  color:var(--accent-strong); border:1px solid var(--line);
+  border-radius:20px; padding:3px 10px;
 }
 
-/* ---- Footer ---- */
+/* ── Footer ── */
 .footer{
-  margin-top:36px;
-  padding-top:18px;
-  border-top:1px solid var(--line);
-  font-size:12.5px;
-  color:var(--muted);
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:center;
+  margin-top:36px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--muted); display:flex;
+  justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:center;
 }
 
-@media (max-width:480px){
-  .wrap{padding:28px 16px 60px;}
-  .wordmark{font-size:22px;}
-  .page-title{font-size:22px;}
-  .profile-row{gap:12px;}
-  .avatar{width:48px;height:48px;font-size:18px;}
+/* ── Responsive ── */
+@media(max-width:560px){
+  .wrap{ padding:28px 16px 60px; }
+  .wordmark{ font-size:22px; }
+  .hero{ grid-template-columns:1fr; }
+  .hero-photo{ aspect-ratio:3/4; max-height:360px; }
+  .hero-name{ font-size:24px; }
+  .email-mono{ display:none; }
+  .email-actions-bar{ flex-direction:column; }
+  .action-pill{ justify-content:center; }
 }
 </style>
 </head>
 <body>
-
 <div class="wrap">
 
   <!-- Masthead -->
   <div class="masthead">
     <a href="index.html" class="wordmark">PDF Merger<span class="dot">.</span></a>
     <a href="index.html" class="back-btn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M19 12H5m0 0 7-7m-7 7 7 7"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5m0 0 7-7m-7 7 7 7"/></svg>
       Back to tool
     </a>
   </div>
 
-  <h1 class="page-title">About &amp; Contact</h1>
-  <p class="page-sub">The person behind PDF Merger — and how to reach them.</p>
-
-  <!-- ===== ABOUT ME ===== -->
-  <div class="card">
-    <p class="card-label">About me</p>
-
-    <div class="profile-row">
-      <div class="avatar">MG</div>
-      <div>
-        <p class="profile-name">Mithun Gowda</p>
-        <p class="profile-edu">Pursuing B.E · 3rd Year · Computer Science</p>
-      </div>
+  <!-- ===== HERO: Portrait photo + Info card ===== -->
+  <div class="hero">
+    <div class="hero-photo">
+      <img src="photo-main.jpg" alt="Mithun Gowda">
     </div>
+    <div class="hero-card">
+      <div>
+        <h1 class="hero-name">Mithun Gowda</h1>
+        <div class="hero-tag" style="margin-top:6px;">
+          <span class="hero-dot"></span>
+          B.E &middot; Computer Science &middot; 3rd Year
+        </div>
+      </div>
+      <p class="hero-desc">
+        I kept jumping between <strong>5 different websites</strong> just to
+        merge a PDF, convert Word docs, and squeeze down photos &mdash;
+        so I built <strong>one place that does it all</strong>,
+        entirely in your browser with no uploads and zero hassle.
+      </p>
+    </div>
+  </div>
 
-    <p class="about-text">
-      Hey! I'm Mithun — a CS undergrad who builds small tools to scratch my own itches.
-      I kept jumping between <strong>five different websites</strong> just to merge a PDF,
-      compress a Word doc, and squeeze down a photo. So I built
-      <strong>PDF Merger</strong> — one place that handles merging, compressing,
-      and converting across formats, entirely in your browser with no uploads.
-    </p>
+  <!-- ===== CONTACT ===== -->
+  <div class="card">
+    <div class="card-label">Get in touch</div>
+    <div class="email-container">
+      <!-- Primary Action: Open directly in Gmail web composer -->
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mithun2k51124@gmail.com&su=Hello%20from%20PDF%20Merger" target="_blank" rel="noopener noreferrer" class="email-btn" id="email-primary-btn" title="Open Gmail compose tab in browser">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" style="flex-shrink:0;">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m2 7 10 7 10-7"/>
+        </svg>
+        <span class="email-btn-text">
+          <span class="email-btn-title">Email me</span>
+          <span class="email-btn-sub">Click to compose in Gmail</span>
+        </span>
+        <span class="email-mono">mithun2k51124@gmail.com</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:6px;opacity:0.85;flex-shrink:0;"><path d="M7 17 17 7m0 0H7m10 0v10"/></svg>
+      </a>
 
-    <p class="about-text" style="margin-bottom:0;">
-      I'm currently working on a bunch of small projects, all aimed at making
-      everyday tasks a little less painful — and <strong>everything I build is open source</strong>.
-    </p>
+      <!-- Quick Actions: Copy address & Default mail client -->
+      <div class="email-actions-bar">
+        <button type="button" class="action-pill" id="copy-btn" onclick="copyEmailAddress(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copy-text">Copy email address</span>
+        </button>
+
+        <a href="mailto:mithun2k51124@gmail.com?subject=Hello%20from%20PDF%20Merger" class="action-pill" id="client-btn" title="Open in default desktop mail application (Outlook, Apple Mail, etc.)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>Open in Mail App</span>
+        </a>
+      </div>
+
+      <p class="email-hint">
+        Direct link opens a new compose tab in Gmail with my address prefilled. You can also copy my email or launch your computer's mail app.
+      </p>
+    </div>
   </div>
 
   <!-- ===== GITHUB ===== -->
   <div class="card">
-    <p class="card-label">Find me on GitHub</p>
-    <a href="https://github.com/mithun2k51124" target="_blank" rel="noopener noreferrer" class="github-link" id="github-profile-link">
-      <svg class="github-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <div class="card-label">Find me on GitHub</div>
+    <a href="https://github.com/mithun2k51124" target="_blank" rel="noopener noreferrer" class="github-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--ink)" aria-hidden="true" style="flex-shrink:0">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
       </svg>
-      <span class="github-text">
-        <span class="github-handle">mithun2k51124</span>
-        <span class="github-desc">github.com/mithun2k51124</span>
-      </span>
-      <svg class="github-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7m0 0H7m10 0v10"/></svg>
+      <div>
+        <div class="github-handle">mithun2k51124</div>
+        <div class="github-subdesc">github.com/mithun2k51124</div>
+      </div>
+      <svg class="github-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7m0 0H7m10 0v10"/></svg>
     </a>
   </div>
 
   <!-- ===== PROJECTS ===== -->
   <div class="card">
-    <p class="card-label">Open-source projects</p>
+    <div class="card-label">Open-source projects</div>
     <div class="project-list">
-      <div class="project-item">
-        <div class="project-dot"></div>
-        <div class="project-info">
-          <p class="project-name">PDF Merger <span style="font-weight:400;font-size:12px;color:var(--muted);">· this site</span></p>
-          <p class="project-desc">Merge PDFs, Word docs &amp; images and export as PDF or DOCX — all in your browser, zero uploads.</p>
-        </div>
-      </div>
-      <div class="project-item">
-        <div class="project-dot"></div>
-        <div class="project-info">
-          <p class="project-name">Fitness Tracker App</p>
-          <p class="project-desc">Track workouts, sets, reps and progress — a lightweight fitness companion app.</p>
-        </div>
-      </div>
-      <div class="project-item">
-        <div class="project-dot"></div>
-        <div class="project-info">
-          <p class="project-name">Ear Mouse</p>
-          <p class="project-desc">Control your mouse pointer using head/ear movements — accessibility meets creativity.</p>
-        </div>
-      </div>
-      <div class="project-item">
-        <div class="project-dot" style="background:var(--muted);opacity:0.5;"></div>
-        <div class="project-info">
-          <p class="project-name" style="color:var(--muted);font-weight:500;">More on the way…</p>
-          <p class="project-desc">Working on small projects to make everyday tasks useful for everyone.</p>
-        </div>
-      </div>
-    </div>
-    <span class="open-source-tag">⬡ Everything is open source</span>
-  </div>
 
-  <!-- ===== CONTACT ===== -->
-  <div class="card">
-    <p class="card-label">Get in touch</p>
-    <a href="mailto:mithun2k51124@gmail.com?subject=Hello from PDF Merger" class="email-btn" id="email-me-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
-      Email me
-      <span class="email-address">mithun2k51124@gmail.com</span>
-    </a>
-    <p style="font-size:12.5px;color:var(--muted);margin:14px 0 0;">
-      Clicking <em>Email me</em> will open your default mail app with my address already filled in.
-      Feel free to reach out for feedback, bugs, or just to say hi!
-    </p>
+      <div class="project-item">
+        <div class="project-dot"></div>
+        <div>
+          <div class="project-name">PDF Merger <span style="font-weight:400;font-size:12px;color:var(--muted);margin-left:4px;">· this site</span></div>
+          <div class="project-desc">Merge PDFs, Word docs &amp; images — export as PDF or DOCX. Runs completely in your browser with zero server uploads.</div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div class="project-dot"></div>
+        <div>
+          <div class="project-name">Fitness Tracker App</div>
+          <div class="project-desc">Track workouts, sets, reps, and personal fitness progress — a clean and lightweight training companion.</div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div class="project-dot"></div>
+        <div>
+          <div class="project-name">Air Mouse</div>
+          <div class="project-desc">Control your mouse pointer using the placement and movement of your hand in the air — acts technically just like a mouse without touching any physical hardware.</div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div class="project-dot" style="background:var(--muted);opacity:.5;"></div>
+        <div>
+          <div class="project-name" style="color:var(--muted);font-weight:500;">More in development…</div>
+          <div class="project-desc">Building and sharing helpful small tools designed to make everyday workflows simpler for everyone.</div>
+        </div>
+      </div>
+
+    </div>
+    <span class="oss-tag">⬡ Everything is open source</span>
   </div>
 
   <!-- Footer -->
   <div class="footer">
-    <span>© 2025 Mithun Gowda · PDF Merger</span>
-    <a href="index.html" style="color:var(--muted);text-decoration:none;font-size:12.5px;" aria-label="Back to PDF Merger tool">← Back to tool</a>
+    <span>&copy; 2025 Mithun Gowda &middot; PDF Merger</span>
+    <a href="index.html" style="color:var(--muted);transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&larr; Back to tool</a>
   </div>
 
 </div>
+
+<script>
+function copyEmailAddress(btn) {
+  const email = 'mithun2k51124@gmail.com';
+  const textEl = document.getElementById('copy-text');
+  const oldText = textEl.textContent;
+
+  function onSuccess() {
+    textEl.textContent = 'Copied to clipboard! ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      textEl.textContent = oldText;
+      btn.classList.remove('copied');
+    }, 2500);
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).then(onSuccess).catch(() => {
+      fallbackCopy(email, onSuccess);
+    });
+  } else {
+    fallbackCopy(email, onSuccess);
+  }
+}
+
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    cb();
+  } catch (e) {
+    prompt('Copy email address:', text);
+  }
+  document.body.removeChild(ta);
+}
+</script>
 </body>
 </html>
