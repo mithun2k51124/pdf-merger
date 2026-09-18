@@ -602,6 +602,8 @@ input[type="range"]{
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
+<!-- cfb: OLE Compound File Binary parser — needed for old .doc format -->
+<script src="https://cdn.jsdelivr.net/npm/cfb@1.2.2/dist/cfb.min.js"></script>
 
 <script>
 (function(){
@@ -810,11 +812,116 @@ input[type="range"]{
     return {dataUrl: canvas.toDataURL("image/jpeg", 0.82), w: canvas.width, h: canvas.height};
   }
 
-  /** Convert a DOCX/DOC file to an HTML string using mammoth */
+  /**
+   * Convert a Word file to an HTML string.
+   * - .docx  → mammoth (rich conversion)
+   * - .doc   → CFB OLE parser + UTF-16LE text extraction (binary format)
+   */
   async function docxToHtml(file){
+    const type = fileType(file);
     const arrayBuffer = await file.arrayBuffer();
-    const result = await mammoth.convertToHtml({arrayBuffer});
-    return result.value; // HTML string
+
+    if(type === "docx"){
+      // Modern .docx (ZIP/XML) — mammoth handles this perfectly
+      const result = await mammoth.convertToHtml({arrayBuffer});
+      return result.value || '<p><em>(Empty document)</em></p>';
+    }
+
+    // ---- Old binary .doc (OLE Compound Document) ----
+    return extractDocBinaryToHtml(arrayBuffer);
+  }
+
+  /**
+   * Extract text from an old binary .doc file.
+   * Strategy:
+   *   1. Parse OLE structure with cfb and get the WordDocument stream.
+   *   2. Read the FIB to detect Unicode vs ANSI encoding.
+   *   3. Extract text as UTF-16LE (Word 97–2003) or ANSI (Word 95 and older).
+   *   4. Split on paragraph marks (\r = 0x0D in Word) → HTML paragraphs.
+   */
+  function extractDocBinaryToHtml(arrayBuffer){
+    const raw = new Uint8Array(arrayBuffer);
+    let streamBytes = raw; // fallback: use whole file
+
+    try{
+      if(typeof CFB !== 'undefined'){
+        const cfbData = CFB.read(raw, {type: 'array'});
+        // Find the main WordDocument stream
+        const entry = CFB.find(cfbData, 'WordDocument') ||
+                      CFB.find(cfbData, '/WordDocument');
+        if(entry && entry.content && entry.content.length > 512){
+          streamBytes = new Uint8Array(entry.content);
+        }
+      }
+    }catch(e){
+      console.warn('[.doc] CFB parse failed, falling back to raw bytes:', e.message);
+    }
+
+    // --- Determine encoding from FIB ---
+    // wIdent = bytes 0-1; 0xA5EC = Word 97+, 0xA5DC = Word 6/95
+    const wIdent = streamBytes[0] | (streamBytes[1] << 8);
+    // fFlags at byte offset 10 in FIB:
+    //   bit 8 (0x0100) = fFarEast, bit 2 (0x0004) = fComplex
+    const fFlags = (streamBytes.length > 11) ? (streamBytes[10] | (streamBytes[11] << 8)) : 0;
+    const isUnicode = (wIdent === 0xA5EC); // Word 97+ always uses Unicode internally
+
+    let text;
+    if(isUnicode){
+      text = extractUtf16Le(streamBytes);
+    } else {
+      text = extractAnsiText(streamBytes);
+    }
+
+    // If extraction yielded very little, try the opposite encoding
+    const wordCount = (text.match(/\b[a-zA-Z]{2,}\b/g) || []).length;
+    if(wordCount < 10){
+      const alt = isUnicode ? extractAnsiText(streamBytes) : extractUtf16Le(streamBytes);
+      const altWords = (alt.match(/\b[a-zA-Z]{2,}\b/g) || []).length;
+      if(altWords > wordCount) text = alt;
+    }
+
+    // Split on \r (Word paragraph mark) and \n
+    const paragraphs = text
+      .replace(/\r\n?/g, '\n')
+      .split('\n')
+      .map(p => p.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim())
+      .filter(p => p.length > 0);
+
+    if(paragraphs.length === 0){
+      return '<p><em>(Could not extract text from this .doc file — it may be encrypted or corrupted)</em></p>';
+    }
+
+    return paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('\n');
+  }
+
+  /** Extract text from a byte stream assuming UTF-16LE encoding (Word 97+). */
+  function extractUtf16Le(bytes){
+    const chars = [];
+    for(let i = 0; i < bytes.length - 1; i += 2){
+      const lo = bytes[i], hi = bytes[i + 1];
+      const cp = lo | (hi << 8);
+      if(cp === 0x000D)      chars.push('\r');  // paragraph mark
+      else if(cp === 0x000A) chars.push('\n');  // line feed
+      else if(cp === 0x0009) chars.push('\t');  // tab
+      else if(cp === 0x0013 || cp === 0x0014 || cp === 0x0015) chars.push(' '); // field codes
+      else if(cp === 0x0008) chars.push('');    // skip
+      else if(cp >= 0x0020 && cp !== 0xFFFF && cp !== 0xFFFE) chars.push(String.fromCharCode(cp));
+    }
+    return chars.join('');
+  }
+
+  /** Extract printable ASCII/Latin text from a byte stream (ANSI / Word 95). */
+  function extractAnsiText(bytes){
+    const chars = [];
+    for(let i = 0; i < bytes.length; i++){
+      const c = bytes[i];
+      if(c === 0x0D)         chars.push('\r');
+      else if(c === 0x0A)   chars.push('\n');
+      else if(c === 0x09)   chars.push('\t');
+      else if(c >= 0x20 && c < 0x7F)  chars.push(String.fromCharCode(c));
+      else if(c >= 0xA0 && c <= 0xFF) chars.push(String.fromCharCode(c)); // Latin-1 extended
+    }
+    return chars.join('');
   }
 
   /** Render an HTML string to a canvas using html2canvas */
@@ -868,6 +975,7 @@ input[type="range"]{
   async function mergeAsPdf(files, onProgress){
     const outDoc = await PDFLib.PDFDocument.create();
     let totalOriginal = 0;
+    const errors = [];
 
     for(let i = 0; i < files.length; i++){
       const f = files[i];
@@ -875,58 +983,73 @@ input[type="range"]{
       const type = fileType(f);
       onProgress(`Processing file ${i+1} of ${files.length} (${f.name})…`);
 
-      if(type === "pdf"){
-        // lossless copy
-        const buf = await f.arrayBuffer();
-        const srcDoc = await PDFLib.PDFDocument.load(buf, {ignoreEncryption: true});
-        const pages = await outDoc.copyPages(srcDoc, srcDoc.getPageIndices());
-        pages.forEach(p => outDoc.addPage(p));
+      try{
+        if(type === "pdf"){
+          // lossless copy
+          const buf = await f.arrayBuffer();
+          const srcDoc = await PDFLib.PDFDocument.load(buf, {ignoreEncryption: true});
+          const pages = await outDoc.copyPages(srcDoc, srcDoc.getPageIndices());
+          pages.forEach(p => outDoc.addPage(p));
 
-      } else if(type === "docx" || type === "doc"){
-        // DOCX → HTML → canvas → jpeg → pdf page
-        const htmlStr = await docxToHtml(f);
-        const canvas = await htmlToCanvas(htmlStr);
-        const jpegBytes = canvasToJpegBytes(canvas, 0.85);
-        const jpegImg = await outDoc.embedJpg(jpegBytes);
-        // split into A4-ish page heights
-        const pageW = canvas.width;
-        const pageH = canvas.height;
-        const a4h = Math.round(pageW * 1.414);
-        let y = 0;
-        while(y < pageH){
-          const sliceH = Math.min(a4h, pageH - y);
-          // crop canvas slice
-          const sliceCanvas = document.createElement("canvas");
-          sliceCanvas.width = pageW;
-          sliceCanvas.height = sliceH;
-          sliceCanvas.getContext("2d").drawImage(canvas, 0, y, pageW, sliceH, 0, 0, pageW, sliceH);
-          const sliceBytes = canvasToJpegBytes(sliceCanvas, 0.85);
-          const sliceImg = await outDoc.embedJpg(sliceBytes);
-          const page = outDoc.addPage([pageW, sliceH]);
-          page.drawImage(sliceImg, {x:0, y:0, width:pageW, height:sliceH});
-          y += sliceH;
+        } else if(type === "docx" || type === "doc"){
+          // Word → HTML → canvas → sliced jpeg pages
+          const htmlStr = await docxToHtml(f);
+          const canvas = await htmlToCanvas(htmlStr);
+          const pageW = canvas.width;
+          const pageH = canvas.height;
+          const a4h = Math.round(pageW * 1.414);
+          let y = 0;
+          while(y < pageH){
+            const sliceH = Math.min(a4h, pageH - y);
+            const sliceCanvas = document.createElement("canvas");
+            sliceCanvas.width = pageW;
+            sliceCanvas.height = sliceH;
+            sliceCanvas.getContext("2d").drawImage(canvas, 0, y, pageW, sliceH, 0, 0, pageW, sliceH);
+            const sliceBytes = canvasToJpegBytes(sliceCanvas, 0.85);
+            const sliceImg = await outDoc.embedJpg(sliceBytes);
+            const page = outDoc.addPage([pageW, sliceH]);
+            page.drawImage(sliceImg, {x:0, y:0, width:pageW, height:sliceH});
+            y += sliceH;
+          }
+
+        } else if(type === "img"){
+          const canvas = await imageFileToCanvas(f);
+          const jpegBytes = canvasToJpegBytes(canvas, 0.9);
+          const jpegImg = await outDoc.embedJpg(jpegBytes);
+          const page = outDoc.addPage([canvas.width, canvas.height]);
+          page.drawImage(jpegImg, {x:0, y:0, width:canvas.width, height:canvas.height});
         }
-
-      } else if(type === "img"){
-        // image → canvas → jpeg → pdf page
-        const canvas = await imageFileToCanvas(f);
-        const jpegBytes = canvasToJpegBytes(canvas, 0.9);
-        const jpegImg = await outDoc.embedJpg(jpegBytes);
-        const page = outDoc.addPage([canvas.width, canvas.height]);
-        page.drawImage(jpegImg, {x:0, y:0, width:canvas.width, height:canvas.height});
+      } catch(fileErr){
+        console.error(`[mergeAsPdf] Failed on "${f.name}":`, fileErr);
+        errors.push(f.name);
+        // Add a blank error-page placeholder so position is still clear
+        try{
+          const errCanvas = document.createElement("canvas");
+          errCanvas.width = 794; errCanvas.height = 1123; // A4 at 96dpi
+          const ctx = errCanvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, 794, 1123);
+          ctx.fillStyle = "#666";
+          ctx.font = "16px sans-serif";
+          ctx.fillText(`[Could not process: ${f.name}]`, 40, 80);
+          const errBytes = canvasToJpegBytes(errCanvas, 0.7);
+          const errImg = await outDoc.embedJpg(errBytes);
+          const errPage = outDoc.addPage([794, 1123]);
+          errPage.drawImage(errImg, {x:0, y:0, width:794, height:1123});
+        } catch(_){}
       }
     }
 
     const bytes = await outDoc.save();
-    return {bytes, totalOriginal};
+    return {bytes, totalOriginal, errors};
   }
 
   // ==================== DOCX OUTPUT PATH ====================
 
   async function mergeAsDocx(files, onProgress){
     let totalOriginal = 0;
-    // We build one big HTML document and convert via html-docx-js
     let bodyParts = [];
+    const errors = [];
 
     for(let i = 0; i < files.length; i++){
       const f = files[i];
@@ -935,37 +1058,38 @@ input[type="range"]{
       onProgress(`Processing file ${i+1} of ${files.length} (${f.name})…`);
 
       if(i > 0){
-        // page break between files
         bodyParts.push('<p style="page-break-before:always;"></p>');
       }
 
-      if(type === "pdf"){
-        // PDF → render each page as image → embed as <img> in HTML
-        const buf = await f.arrayBuffer();
-        const loadingTask = pdfjsLib.getDocument({data: buf});
-        const pdf = await loadingTask.promise;
-        for(let pg = 1; pg <= pdf.numPages; pg++){
-          const page = await pdf.getPage(pg);
-          const {dataUrl} = await pdfPageToJpegDataUrl(page, 1.2);
+      try{
+        if(type === "pdf"){
+          const buf = await f.arrayBuffer();
+          const loadingTask = pdfjsLib.getDocument({data: buf});
+          const pdf = await loadingTask.promise;
+          for(let pg = 1; pg <= pdf.numPages; pg++){
+            const page = await pdf.getPage(pg);
+            const {dataUrl} = await pdfPageToJpegDataUrl(page, 1.2);
+            bodyParts.push(`<p><img src="${dataUrl}" style="max-width:100%;display:block;margin:0 auto;" /></p>`);
+            if(pg < pdf.numPages) bodyParts.push('<p style="page-break-before:always;"></p>');
+          }
+
+        } else if(type === "docx" || type === "doc"){
+          const htmlStr = await docxToHtml(f);
+          bodyParts.push(htmlStr);
+
+        } else if(type === "img"){
+          const dataUrl = await new Promise((res, rej)=>{
+            const reader = new FileReader();
+            reader.onload = ()=> res(reader.result);
+            reader.onerror = rej;
+            reader.readAsDataURL(f);
+          });
           bodyParts.push(`<p><img src="${dataUrl}" style="max-width:100%;display:block;margin:0 auto;" /></p>`);
-          if(pg < pdf.numPages) bodyParts.push('<p style="page-break-before:always;"></p>');
         }
-
-      } else if(type === "docx" || type === "doc"){
-        const htmlStr = await docxToHtml(f);
-        bodyParts.push(htmlStr);
-
-      } else if(type === "img"){
-        const url = URL.createObjectURL(f);
-        // read as data URL to embed
-        const dataUrl = await new Promise((res, rej)=>{
-          const reader = new FileReader();
-          reader.onload = ()=> res(reader.result);
-          reader.onerror = rej;
-          reader.readAsDataURL(f);
-        });
-        URL.revokeObjectURL(url);
-        bodyParts.push(`<p><img src="${dataUrl}" style="max-width:100%;display:block;margin:0 auto;" /></p>`);
+      } catch(fileErr){
+        console.error(`[mergeAsDocx] Failed on "${f.name}":`, fileErr);
+        errors.push(f.name);
+        bodyParts.push(`<p style="color:#b33f30;"><em>[Could not process: ${escapeHtml(f.name)}]</em></p>`);
       }
     }
 
@@ -974,7 +1098,7 @@ input[type="range"]{
       orientation: "portrait",
       margins: {top: 720, right: 720, bottom: 720, left: 720}
     });
-    return {blob: docxBlob, totalOriginal};
+    return {blob: docxBlob, totalOriginal, errors};
   }
 
   // ==================== MERGE BUTTON ====================
@@ -986,12 +1110,24 @@ input[type="range"]{
 
     try{
       if(mergeOutputFmt === "pdf"){
-        const {bytes, totalOriginal} = await mergeAsPdf(mergeFiles, t => statusMergeText.textContent = t);
+        const {bytes, totalOriginal, errors} = await mergeAsPdf(mergeFiles, t => statusMergeText.textContent = t);
         const blob = new Blob([bytes], {type:"application/pdf"});
         renderSingleResult(resultsMerge, "merged.pdf", blob, totalOriginal, bytes.length, false);
+        if(errors && errors.length > 0){
+          const warn = document.createElement("div");
+          warn.className = "result-card";
+          warn.innerHTML = `<strong style="color:var(--danger)">⚠ ${errors.length} file(s) could not be processed</strong><br><span style="font-size:13px;color:var(--muted)">${errors.map(e=>escapeHtml(e)).join(', ')}<br>These appear as blank pages in the output. The rest merged successfully.</span>`;
+          resultsMerge.appendChild(warn);
+        }
       } else {
-        const {blob, totalOriginal} = await mergeAsDocx(mergeFiles, t => statusMergeText.textContent = t);
+        const {blob, totalOriginal, errors} = await mergeAsDocx(mergeFiles, t => statusMergeText.textContent = t);
         renderSingleResult(resultsMerge, "merged.docx", blob, totalOriginal, blob.size, false);
+        if(errors && errors.length > 0){
+          const warn = document.createElement("div");
+          warn.className = "result-card";
+          warn.innerHTML = `<strong style="color:var(--danger)">⚠ ${errors.length} file(s) could not be processed</strong><br><span style="font-size:13px;color:var(--muted)">${errors.map(e=>escapeHtml(e)).join(', ')}<br>These appear as error notes in the output. The rest merged successfully.</span>`;
+          resultsMerge.appendChild(warn);
+        }
       }
     } catch(err){
       console.error(err);
