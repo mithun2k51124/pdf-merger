@@ -521,6 +521,29 @@ input[type="range"]{
   .controls-row{gap:14px;}
   input[type="range"]{width:110px;}
 }
+
+/* nav contact icon button */
+.nav-contact{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:7px 13px;
+  font-size:13px;
+  font-weight:500;
+  color:var(--muted);
+  cursor:pointer;
+  text-decoration:none;
+  transition:border-color 0.15s, color 0.15s, background 0.15s;
+  flex-shrink:0;
+}
+.nav-contact:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:var(--surface-2);
+}
 </style>
 </head>
 <body>
@@ -529,6 +552,10 @@ input[type="range"]{
 
   <div class="masthead">
     <p class="wordmark">PDF Merger<span class="dot">.</span></p>
+    <a href="contact.html" class="nav-contact" aria-label="About &amp; Contact">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      About &amp; Contact
+    </a>
   </div>
   <p class="tagline">Merge any file format — PDF, Word, images — and export to PDF or DOCX. Right in your browser.</p>
 
