@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Privacy Policy for PDF Merger. Learn how our client-side browser processing safeguards your documents, and our policies on cookies and advertising.">
+<meta name="google-adsense-account" content="ca-pub-6120283129571228">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6120283129571228" crossorigin="anonymous"></script>
+<title>Privacy Policy — PDF Merger</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#EAE8E4;
+  --surface:#FFFFFF;
+  --surface-2:#F3F1EE;
+  --ink:#221F1C;
+  --muted:#726E68;
+  --line:#D9D5CF;
+  --accent:#2F6B5E;
+  --accent-strong:#234F45;
+  --accent-ink:#FDFBF9;
+  --radius:10px;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B1A18; --surface:#242220; --surface-2:#2B2926;
+    --ink:#EDEAE5; --muted:#9C978F; --line:#3A3733;
+    --accent:#4F9C89; --accent-strong:#6BB6A2; --accent-ink:#0E1512;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B1A18; --surface:#242220; --surface-2:#2B2926;
+  --ink:#EDEAE5; --muted:#9C978F; --line:#3A3733;
+  --accent:#4F9C89; --accent-strong:#6BB6A2; --accent-ink:#0E1512;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,-apple-system,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+@media(prefers-reduced-motion:reduce){ *{ transition:none!important; animation:none!important; } }
+a{ color:var(--accent); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+
+/* ── Layout ── */
+.wrap{ max-width:720px; margin:0 auto; padding:40px 20px 80px; }
+
+/* ── Masthead ── */
+.masthead{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:32px; }
+.wordmark{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:26px; letter-spacing:-0.01em; color:var(--ink); text-decoration:none; }
+.wordmark .dot{ color:var(--accent); }
+.back-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--surface); border:1px solid var(--line); border-radius:7px;
+  padding:7px 13px; font-size:13px; font-weight:500; color:var(--muted);
+  text-decoration:none; transition:border-color .15s, color .15s, background .15s;
+}
+.back-btn:hover{ border-color:var(--accent); color:var(--accent); background:var(--surface-2); text-decoration:none; }
+
+/* ── Hero Banner ── */
+.hero-card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:28px 30px; margin-bottom:24px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.03);
+}
+.badge{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; background:var(--surface-2);
+  color:var(--accent); border:1px solid var(--line); border-radius:20px;
+  padding:4px 11px; margin-bottom:14px;
+}
+.badge svg{ flex-shrink:0; }
+.title{
+  font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700;
+  letter-spacing:-0.02em; color:var(--ink); line-height:1.2; margin-bottom:8px;
+}
+.effective-date{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); margin-bottom:16px;
+}
+.highlight-box{
+  background:var(--surface-2); border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0; padding:14px 18px; font-size:13.5px;
+  color:var(--ink); line-height:1.6;
+}
+.highlight-box strong{ color:var(--ink); }
+
+/* ── Content Sections ── */
+.policy-card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:26px 30px; margin-bottom:18px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.03);
+}
+.section-num{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500;
+  color:var(--accent); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px;
+}
+.section-title{
+  font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700;
+  letter-spacing:-0.01em; color:var(--ink); margin-bottom:14px;
+}
+.policy-card p{
+  font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:14px;
+}
+.policy-card p:last-child{ margin-bottom:0; }
+.policy-card strong{ color:var(--ink); font-weight:600; }
+.policy-card ul{
+  margin:10px 0 14px 20px; font-size:14px; color:var(--muted); line-height:1.7;
+}
+.policy-card li{ margin-bottom:6px; }
+.policy-card li:last-child{ margin-bottom:0; }
+
+/* ── Opt-out list ── */
+.opt-out-box{
+  background:var(--surface-2); border:1px solid var(--line);
+  border-radius:8px; padding:14px 18px; margin:14px 0; font-size:13px;
+}
+.opt-out-box a{ font-weight:500; }
+
+/* ── Footer ── */
+.footer{
+  margin-top:36px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--muted); display:flex;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center;
+}
+.footer a{ color:var(--muted); }
+.footer a:hover{ color:var(--accent); text-decoration:none; }
+
+@media(max-width:560px){
+  .wrap{ padding: 24px 16px 50px; }
+  .wordmark{ font-size: 22px; }
+  .title{ font-size: 24px; }
+  .hero-card, .policy-card{ padding: 20px 18px; margin-bottom: 14px; }
+  .footer{ flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <a href="index.html" class="wordmark">PDF Merger<span class="dot">.</span></a>
+    <a href="index.html" class="back-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5m0 0 7-7m-7 7 7 7"/></svg>
+      Back to tool
+    </a>
+  </div>
+
+  <!-- Hero Header -->
+  <div class="hero-card">
+    <div class="badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Privacy &amp; Transparency
+    </div>
+    <h1 class="title">Privacy Policy</h1>
+    <div class="effective-date">Last updated: September 18, 2026 &middot; Effective immediately</div>
+    <div class="highlight-box">
+      <strong>Core Privacy Architecture:</strong> PDF Merger operates entirely client-side inside your web browser. When you select, convert, compress, or merge files, your documents are processed strictly in your local device memory. <strong>No files, document contents, or personal files are ever uploaded, transmitted to, or stored on any server.</strong>
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="policy-card">
+    <div class="section-num">Section 01</div>
+    <h2 class="section-title">Client-Side File Processing &amp; Data Security</h2>
+    <p>
+      Traditional online file utilities transfer your private files to remote cloud servers to process them. <strong>PDF Merger is designed with an opposite, privacy-first architecture:</strong>
+    </p>
+    <ul>
+      <li><strong>Local Execution:</strong> All document parsing, rendering, text rasterization, and PDF/DOCX compilation are executed locally on your machine using modern web standards (HTML5 Web APIs, Canvas, Web Workers, and WebAssembly).</li>
+      <li><strong>Zero Server Uploads:</strong> Your documents (PDFs, Word .docx/.doc files, images) never leave your device. Our web servers never receive, inspect, or retain your documents.</li>
+      <li><strong>Session Isolation:</strong> Once you close the browser tab or refresh the page, all file data held in volatile browser memory is immediately purged by your browser's garbage collector.</li>
+    </ul>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="policy-card">
+    <div class="section-num">Section 02</div>
+    <h2 class="section-title">Google AdSense &amp; Advertising Disclosures</h2>
+    <p>
+      To support the free operation and maintenance of this website, we display advertisements provided by <strong>Google AdSense</strong>. Because Google provides these advertising services, Google's advertising policies require us to inform you of the following:
+    </p>
+    <ul>
+      <li>Third-party vendors, including <strong>Google</strong>, use cookies to serve ads based on a user's prior visits to this website or other websites on the internet.</li>
+      <li>Google's use of advertising cookies enables it and its partners to serve ads to users based on their visits to this site and/or other sites across the web.</li>
+      <li>These cookies allow ad networks to provide frequency capping, fraud prevention, aggregate reporting, and—where consented—personalized advertisements.</li>
+      <li><strong>Crucial Distinction:</strong> Google AdSense does not have access to, and cannot read, any documents or files you process within PDF Merger. Advertising scripts operate independently of local file memory.</li>
+    </ul>
+
+    <p><strong>Opting Out of Personalized Advertising:</strong></p>
+    <div class="opt-out-box">
+      Users may opt out of personalized advertising by managing their preferences directly:
+      <ul style="margin:8px 0 0 16px;">
+        <li><a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings &rarr;</a></li>
+        <li><a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">Digital Advertising Alliance (aboutads.info) &rarr;</a></li>
+        <li><a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer">Network Advertising Initiative (NAI) Opt-Out &rarr;</a></li>
+      </ul>
+    </div>
+    <p style="font-size:12.5px;">
+      Opting out of personalized advertising does not mean you will see no ads; it means the ads displayed will be non-personalized (contextual rather than based on past browsing history).
+    </p>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="policy-card">
+    <div class="section-num">Section 03</div>
+    <h2 class="section-title">Cookies and Tracking Technologies</h2>
+    <p>
+      A cookie is a small text file stored on your device by your web browser.
+    </p>
+    <ul>
+      <li><strong>First-Party Cookies:</strong> PDF Merger does not set first-party tracking cookies, user profiling cookies, or persistent authentication cookies.</li>
+      <li><strong>Third-Party Cookies:</strong> Third-party partners (primarily Google for AdSense) may set cookies or web beacons to serve ads and evaluate traffic metrics in accordance with their privacy policies.</li>
+    </ul>
+    <p>
+      You can instruct your browser, through its settings, to refuse all cookies or to indicate when a cookie is being sent. Most modern browsers also support private browsing (Incognito) modes that automatically delete cookies when the session ends.
+    </p>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="policy-card">
+    <div class="section-num">Section 04</div>
+    <h2 class="section-title">Log Files and Infrastructure Data</h2>
+    <p>
+      Like virtually all websites hosted on modern web infrastructure (such as GitHub Pages or content delivery networks), basic web server log files are generated when you request web pages. These logs may include:
+    </p>
+    <ul>
+      <li>Internet Protocol (IP) addresses (often masked or aggregated);</li>
+      <li>Browser type, operating system, and language preferences;</li>
+      <li>Referring URLs and timestamps of page requests.</li>
+    </ul>
+    <p>
+      This data is used solely for technical site delivery, bandwidth monitoring, DDoS defense, and ensuring system stability. It is never combined with document contents or personal identities.
+    </p>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="policy-card">
+    <div class="section-num">Section 05</div>
+    <h2 class="section-title">Content Delivery Networks (CDNs) &amp; Open-Source Libraries</h2>
+    <p>
+      To deliver fast load times, this site loads open-source JavaScript libraries (such as PDF-lib, PDF.js, Mammoth, and JSZip) and web typography through public Content Delivery Networks (including jsDelivr and Google Fonts).
+    </p>
+    <p>
+      When your browser fetches these static script files, the CDN servers receive your standard HTTP request headers (IP address and user agent). These CDNs operate under their respective privacy policies and serve only static scripts—they never receive or process your local document files.
+    </p>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="policy-card">
+    <div class="section-num">Section 06</div>
+    <h2 class="section-title">Children's Online Privacy Protection</h2>
+    <p>
+      PDF Merger is a general-purpose utility and is not directed to children under the age of 13. We do not knowingly collect, request, or maintain personally identifiable information from children under 13 years of age, in compliance with the Children's Online Privacy Protection Act (COPPA).
+    </p>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="policy-card">
+    <div class="section-num">Section 07</div>
+    <h2 class="section-title">Your Rights &amp; Data Subject Requests</h2>
+    <p>
+      Because we do not store, catalog, or transmit your files, personal identification, or accounts on our servers:
+    </p>
+    <ul>
+      <li>There is no central database containing your files or documents;</li>
+      <li>We cannot inspect, modify, recover, or disclose any files you process;</li>
+      <li>There is no personal profile for us to delete upon request, as we never collect one.</li>
+    </ul>
+    <p>
+      You maintain complete ownership and unilateral control over your files at all times on your local machine.
+    </p>
+  </div>
+
+  <!-- Section 8 -->
+  <div class="policy-card">
+    <div class="section-num">Section 08</div>
+    <h2 class="section-title">Contact &amp; Privacy Inquiries</h2>
+    <p>
+      If you have questions, feedback, or concerns regarding this Privacy Policy or the security practices of PDF Merger, please contact the developer:
+    </p>
+    <p style="margin-top:10px;">
+      <strong>Developer:</strong> Mithun Gowda<br>
+      <strong>Email:</strong> <a href="mailto:mithun2k51124@gmail.com">mithun2k51124@gmail.com</a><br>
+      <strong>GitHub:</strong> <a href="https://github.com/mithun2k51124" target="_blank" rel="noopener noreferrer">github.com/mithun2k51124</a>
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>&copy; 2026 Mithun Gowda &middot; PDF Merger</span>
+    <div style="display:flex;gap:16px;align-items:center;">
+      <a href="contact.html">About &amp; Contact</a>
+      <a href="index.html">&larr; Back to tool</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

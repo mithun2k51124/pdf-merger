@@ -209,14 +209,18 @@ a{ color:inherit; text-decoration:none; }
 
 /* ── Responsive ── */
 @media(max-width:560px){
-  .wrap{ padding:28px 16px 60px; }
-  .wordmark{ font-size:22px; }
-  .hero{ grid-template-columns:1fr; }
-  .hero-photo{ aspect-ratio:3/4; max-height:360px; }
-  .hero-name{ font-size:24px; }
-  .email-mono{ display:none; }
-  .email-actions-bar{ flex-direction:column; }
-  .action-pill{ justify-content:center; }
+  .wrap{ padding: 24px 16px 50px; }
+  .wordmark{ font-size: 22px; }
+  .hero{ grid-template-columns: 1fr; gap: 14px; }
+  .hero-photo{ aspect-ratio: 3/4; max-height: 380px; }
+  .hero-card{ padding: 20px 18px; }
+  .hero-name{ font-size: 24px; }
+  .card{ padding: 18px 16px; margin-bottom: 14px; }
+  .email-btn{ padding: 13px 14px; }
+  .email-mono{ display: none; }
+  .email-actions-bar{ flex-direction: column; }
+  .action-pill{ justify-content: center; padding: 10px 14px; width: 100%; }
+  .footer{ flex-direction: column; align-items: center; text-align: center; gap: 12px; }
 }
 </style>
 </head>
@@ -349,8 +353,14 @@ a{ color:inherit; text-decoration:none; }
 
   <!-- Footer -->
   <div class="footer">
-    <span>&copy; 2025 Mithun Gowda &middot; PDF Merger</span>
-    <a href="index.html" style="color:var(--muted);transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&larr; Back to tool</a>
+    <span>&copy; 2026 Mithun Gowda &middot; PDF Merger</span>
+    <div style="display:flex;gap:16px;align-items:center;">
+      <a href="privacy.html" style="color:var(--muted);display:inline-flex;align-items:center;gap:5px;transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Privacy Policy
+      </a>
+      <a href="index.html" style="color:var(--muted);transition:color .15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&larr; Back to tool</a>
+    </div>
   </div>
 
 </div>

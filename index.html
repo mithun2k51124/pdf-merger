@@ -78,7 +78,7 @@ button{font-family:inherit;}
 
 .masthead{
   display:flex;
-  align-items:baseline;
+  align-items:center;
   justify-content:space-between;
   gap:16px;
   margin-bottom:6px;
@@ -450,11 +450,17 @@ input[type="range"]{
   display:flex;
   justify-content:space-between;
   flex-wrap:wrap;
-  gap:8px;
+  gap:12px;
   align-items:center;
 }
-.contact-link{
+.footer-links{
   display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.footer-link{
+  display:inline-flex;
   align-items:center;
   gap:6px;
   color:var(--muted);
@@ -462,8 +468,8 @@ input[type="range"]{
   font-size:12.5px;
   transition:color 0.15s;
 }
-.contact-link:hover{ color:var(--accent); }
-.contact-link svg{ flex-shrink:0; }
+.footer-link:hover{ color:var(--accent); }
+.footer-link svg{ flex-shrink:0; }
 
 /* About section */
 .about-section{
@@ -513,13 +519,82 @@ input[type="range"]{
   line-height:1.55;
 }
 
-@media (max-width:480px){
-  .wrap{padding:28px 16px 60px;}
+@media (max-width:560px){
+  .wrap{padding:24px 16px 50px;}
+  .masthead{gap:10px; margin-bottom:8px;}
   .wordmark{font-size:22px;}
-  .tabs{gap:0;}
-  .tab{margin-right:16px; font-size:14px;}
-  .controls-row{gap:14px;}
-  input[type="range"]{width:110px;}
+  .nav-contact{padding:6px 11px; font-size:12px; gap:5px;}
+  .tagline{font-size:13.5px; margin-bottom:22px;}
+
+  /* Touch-friendly scrollable tabs */
+  .tabs{
+    gap:0;
+    margin-bottom:22px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    white-space:nowrap;
+    flex-shrink:0;
+    padding:10px 12px;
+    margin-right:6px;
+    font-size:13.5px;
+  }
+
+  /* Compact dropzone for mobile */
+  .dropzone{padding:28px 14px;}
+  .dropzone-icon{width:34px; height:34px; margin-bottom:8px;}
+  .dz-title{font-size:14.5px;}
+  .dz-sub{font-size:12px; margin-top:3px;}
+  .format-pills{gap:5px; margin-top:10px;}
+  .format-pill{font-size:10.5px; padding:2px 7px;}
+
+  /* Controls adapt to full-width touch targets */
+  .controls-row{
+    flex-direction:column;
+    align-items:stretch;
+    gap:12px;
+    margin-top:16px;
+  }
+  .field{width:100%;}
+  .segmented{width:100%; display:flex;}
+  .segmented button{
+    flex:1;
+    text-align:center;
+    padding:9px 10px;
+    font-size:13px;
+  }
+  select{width:100%; padding:9px 10px;}
+  input[type="range"]{width:100%;}
+
+  /* File queue mobile spacing */
+  .file-row{padding:10px 10px; gap:8px;}
+  .file-index{width:14px; font-size:11px;}
+  .file-name{font-size:13px;}
+  .file-size{font-size:11px;}
+  .file-remove{padding:4px 6px; font-size:18px;}
+
+  /* Result cards */
+  .result-card{padding:14px 12px;}
+  .result-head{flex-direction:column; align-items:stretch; gap:10px;}
+  .result-name{font-size:13.5px; white-space:normal; word-break:break-all;}
+  .download-btn{width:100%; text-align:center; padding:9px 14px;}
+  .size-bar-row{gap:6px;}
+  .size-bar-label{width:48px; font-size:11px;}
+  .size-bar-val{width:52px; font-size:11px;}
+
+  /* Footer & About */
+  .footer{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:14px;
+    padding-top:16px;
+  }
+  .footer-links{justify-content:center; gap:14px;}
+  .about-section{padding:18px 18px; margin-top:32px;}
 }
 
 /* nav contact icon button */
@@ -682,10 +757,16 @@ input[type="range"]{
 
   <div class="footer">
     <span>Everything happens on your device — files are never uploaded anywhere.</span>
-    <a class="contact-link" href="mailto:mithun2k51124@gmail.com" aria-label="Contact us by email">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
-      mithun2k51124@gmail.com
-    </a>
+    <div class="footer-links">
+      <a class="footer-link" href="privacy.html" aria-label="Privacy Policy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Privacy Policy
+      </a>
+      <a class="footer-link" href="contact.html" aria-label="About and Contact">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        About &amp; Contact
+      </a>
+    </div>
   </div>
 
 </div>
