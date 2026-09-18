@@ -451,6 +451,54 @@ input[type="range"]{
   justify-content:space-between;
   flex-wrap:wrap;
   gap:8px;
+  align-items:center;
+}
+.contact-link{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:12.5px;
+  transition:color 0.15s;
+}
+.contact-link:hover{ color:var(--accent); }
+.contact-link svg{ flex-shrink:0; }
+
+/* About section */
+.about-section{
+  margin-top:40px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px 24px;
+}
+.about-title{
+  font-family:'Space Grotesk', system-ui, sans-serif;
+  font-size:15px;
+  font-weight:700;
+  margin:0 0 10px;
+  color:var(--ink);
+  letter-spacing:-0.01em;
+}
+.about-body{
+  font-size:13.5px;
+  color:var(--muted);
+  line-height:1.65;
+  margin:0;
+  max-width:62ch;
+}
+.about-body strong{ color:var(--ink); font-weight:600; }
+.about-quote{
+  margin:14px 0 0;
+  padding:10px 14px;
+  border-left:3px solid var(--accent);
+  background:var(--surface-2);
+  border-radius:0 6px 6px 0;
+  font-size:13px;
+  color:var(--muted);
+  font-style:italic;
+  line-height:1.6;
 }
 
 /* conversion note banner */
@@ -589,8 +637,28 @@ input[type="range"]{
 
   <div class="ad-slot" id="ad-slot">Ad space</div>
 
+  <!-- ===== ABOUT SECTION ===== -->
+  <div class="about-section">
+    <h2 class="about-title">About this tool</h2>
+    <p class="about-body">
+      <strong>PDF Merger</strong> is a free, browser-based utility that lets you merge, compress,
+      and convert files — all without uploading anything to a server.
+      Everything runs locally on your device, so your documents stay private.
+    </p>
+    <blockquote class="about-quote">
+      &ldquo;I got tired of jumping between five different websites just to merge a PDF,
+      compress a Word doc, and squeeze down an image. So I built one place that does
+      it all — merge PDFs, DOCXs, and images together, compress anything, and export
+      to whatever format you need. No installs, no uploads, no fuss.&rdquo;
+    </blockquote>
+  </div>
+
   <div class="footer">
     <span>Everything happens on your device — files are never uploaded anywhere.</span>
+    <a class="contact-link" href="mailto:mithun2351124@gmail.com" aria-label="Contact us by email">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+      mithun2351124@gmail.com
+    </a>
   </div>
 
 </div>
