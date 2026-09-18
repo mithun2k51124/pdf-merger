@@ -431,16 +431,43 @@ input[type="range"]{
   margin-top:2px;
 }
 
-.ad-slot{
-  margin-top:44px;
-  border:1px dashed var(--line);
+/* FAQ Section */
+.faq-section{
+  margin-top:24px;
+  background:var(--surface);
+  border:1px solid var(--line);
   border-radius:var(--radius);
-  padding:14px;
-  text-align:center;
-  font-size:11.5px;
-  color:var(--muted);
-  letter-spacing:0.01em;
+  padding:26px 28px;
 }
+.faq-badge{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; background:var(--surface-2);
+  color:var(--accent); border:1px solid var(--line); border-radius:20px;
+  padding:3px 10px; margin-bottom:12px;
+}
+.faq-title{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  font-size:20px; font-weight:700; letter-spacing:-0.01em; color:var(--ink);
+  margin:0 0 18px;
+}
+.faq-grid{
+  display:flex; flex-direction:column; gap:14px;
+}
+.faq-item{
+  padding:14px 16px;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+.faq-q{
+  font-size:14px; font-weight:600; color:var(--ink); margin:0 0 6px;
+  line-height:1.4;
+}
+.faq-a{
+  font-size:13px; color:var(--muted); line-height:1.6; margin:0;
+}
+.faq-a strong{ color:var(--ink); font-weight:600; }
 
 .footer{
   margin-top:36px;
@@ -780,8 +807,6 @@ input[type="range"]{
     <div class="results" id="results-img"></div>
   </section>
 
-  <div class="ad-slot" id="ad-slot">Ad space</div>
-
   <!-- ===== ABOUT SECTION ===== -->
   <div class="about-section">
     <h2 class="about-title">About this tool</h2>
@@ -798,12 +823,61 @@ input[type="range"]{
     </blockquote>
   </div>
 
+  <!-- ===== FAQ & GUIDE SECTION ===== -->
+  <div class="faq-section">
+    <div class="faq-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help &amp; Answers
+    </div>
+    <h2 class="faq-title">Frequently Asked Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3 class="faq-q">Are my files uploaded or stored on any server?</h3>
+        <p class="faq-a">
+          <strong>Never.</strong> PDF Merger executes 100% locally inside your web browser using HTML5 Canvas, Web Workers, and WebAssembly memory buffers. Your documents, Word files, and photos never leave your device, ensuring complete confidentiality.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">Which file formats can I merge together?</h3>
+        <p class="faq-a">
+          You can mix and combine <strong>PDFs (.pdf)</strong>, modern Microsoft Word documents <strong>(.docx)</strong>, legacy Word files <strong>(.doc)</strong>, and images <strong>(JPEG, PNG, WEBP)</strong> in any order, and export the consolidated output as either a unified PDF or DOCX.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">How does browser-based compression work?</h3>
+        <p class="faq-a">
+          For PDFs, pages are rendered into optimized image streams and repackaged with targeted JPEG compression levels (Light, Standard, Strong). For standalone images, you have fine-grained control over visual quality and maximum dimension capping.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">Is there any limit on file size or usage?</h3>
+        <p class="faq-a">
+          There are no daily quotas, paywalls, watermarks, or account registration requirements. Since all processing runs locally using your device's hardware, performance scales directly with your computer or phone's available memory.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">Why is this tool completely free?</h3>
+        <p class="faq-a">
+          PDF Merger was created by an independent developer to replace cluttered, subscription-locked file converters. The site is supported by non-intrusive Google AdSense advertising, allowing the tool to remain 100% free and open to everyone.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <div class="footer">
     <span>Everything happens on your device — files are never uploaded anywhere.</span>
     <div class="footer-links">
       <a class="footer-link" href="privacy.html" aria-label="Privacy Policy">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Privacy Policy
+      </a>
+      <a class="footer-link" href="terms.html" aria-label="Terms of Service">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Terms of Service
       </a>
       <a class="footer-link" href="contact.html" aria-label="About and Contact">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>

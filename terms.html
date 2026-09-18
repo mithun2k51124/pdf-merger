@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Terms of Service for PDF Merger. Review the terms governing the use of our browser-based file conversion and merging utility.">
+<meta name="google-adsense-account" content="ca-pub-6120283129571228">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6120283129571228" crossorigin="anonymous"></script>
+<title>Terms of Service — PDF Merger</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#EAE8E4;
+  --surface:#FFFFFF;
+  --surface-2:#F3F1EE;
+  --ink:#221F1C;
+  --muted:#726E68;
+  --line:#D9D5CF;
+  --accent:#2F6B5E;
+  --accent-strong:#234F45;
+  --accent-ink:#FDFBF9;
+  --radius:10px;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B1A18; --surface:#242220; --surface-2:#2B2926;
+    --ink:#EDEAE5; --muted:#9C978F; --line:#3A3733;
+    --accent:#4F9C89; --accent-strong:#6BB6A2; --accent-ink:#0E1512;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B1A18; --surface:#242220; --surface-2:#2B2926;
+  --ink:#EDEAE5; --muted:#9C978F; --line:#3A3733;
+  --accent:#4F9C89; --accent-strong:#6BB6A2; --accent-ink:#0E1512;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,-apple-system,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+@media(prefers-reduced-motion:reduce){ *{ transition:none!important; animation:none!important; } }
+a{ color:var(--accent); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+
+/* ── Layout ── */
+.wrap{ max-width:720px; margin:0 auto; padding:40px 20px 80px; }
+
+/* ── Masthead ── */
+.masthead{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:32px; }
+.wordmark{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:26px; letter-spacing:-0.01em; color:var(--ink); text-decoration:none; }
+.wordmark .dot{ color:var(--accent); }
+.back-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--surface); border:1px solid var(--line); border-radius:7px;
+  padding:7px 13px; font-size:13px; font-weight:500; color:var(--muted);
+  text-decoration:none; transition:border-color .15s, color .15s, background .15s;
+}
+.back-btn:hover{ border-color:var(--accent); color:var(--accent); background:var(--surface-2); text-decoration:none; }
+
+/* ── Hero Banner ── */
+.hero-card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:28px 30px; margin-bottom:24px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.03);
+}
+.badge{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; background:var(--surface-2);
+  color:var(--accent); border:1px solid var(--line); border-radius:20px;
+  padding:4px 11px; margin-bottom:14px;
+}
+.badge svg{ flex-shrink:0; }
+.title{
+  font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700;
+  letter-spacing:-0.02em; color:var(--ink); line-height:1.2; margin-bottom:8px;
+}
+.effective-date{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); margin-bottom:16px;
+}
+.highlight-box{
+  background:var(--surface-2); border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0; padding:14px 18px; font-size:13.5px;
+  color:var(--ink); line-height:1.6;
+}
+.highlight-box strong{ color:var(--ink); }
+
+/* ── Content Sections ── */
+.terms-card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:26px 30px; margin-bottom:18px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.03);
+}
+.section-num{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500;
+  color:var(--accent); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px;
+}
+.section-title{
+  font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700;
+  letter-spacing:-0.01em; color:var(--ink); margin-bottom:14px;
+}
+.terms-card p{
+  font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:14px;
+}
+.terms-card p:last-child{ margin-bottom:0; }
+.terms-card strong{ color:var(--ink); font-weight:600; }
+.terms-card ul{
+  margin:10px 0 14px 20px; font-size:14px; color:var(--muted); line-height:1.7;
+}
+.terms-card li{ margin-bottom:6px; }
+.terms-card li:last-child{ margin-bottom:0; }
+
+/* ── Footer ── */
+.footer{
+  margin-top:36px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--muted); display:flex;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center;
+}
+.footer a{ color:var(--muted); }
+.footer a:hover{ color:var(--accent); text-decoration:none; }
+
+@media(max-width:560px){
+  .wrap{ padding:24px 16px 50px; }
+  .wordmark{ font-size:22px; }
+  .title{ font-size:24px; }
+  .hero-card, .terms-card{ padding:20px 18px; margin-bottom:14px; }
+  .footer{ flex-direction:column; align-items:center; text-align:center; gap:12px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <a href="index.html" class="wordmark">PDF Merger<span class="dot">.</span></a>
+    <a href="index.html" class="back-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5m0 0 7-7m-7 7 7 7"/></svg>
+      Back to tool
+    </a>
+  </div>
+
+  <!-- Hero Banner -->
+  <div class="hero-card">
+    <div class="badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Legal &amp; Terms
+    </div>
+    <h1 class="title">Terms of Service</h1>
+    <div class="effective-date">Last updated: September 18, 2026 &middot; Effective immediately</div>
+    <div class="highlight-box">
+      <strong>Summary:</strong> PDF Merger is a free web utility that runs completely client-side in your browser. We never upload, inspect, or claim rights to your files. By using this service, you agree to these fair and transparent terms.
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="terms-card">
+    <div class="section-num">Section 01</div>
+    <h2 class="section-title">Acceptance of Terms</h2>
+    <p>
+      Welcome to <strong>PDF Merger</strong> (accessible at <a href="https://pdfmerger.store">pdfmerger.store</a>). By accessing or using this website, you confirm that you have read, understood, and agreed to be bound by these Terms of Service, as well as our <a href="privacy.html">Privacy Policy</a>.
+    </p>
+    <p>
+      If you do not agree to these terms, please discontinue use of the website immediately.
+    </p>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="terms-card">
+    <div class="section-num">Section 02</div>
+    <h2 class="section-title">Description of Service &amp; Local Processing</h2>
+    <p>
+      PDF Merger provides browser-based file management tools, including combining multiple document formats (PDF, DOCX, DOC, JPEG, PNG, WEBP), converting documents, and compressing files.
+    </p>
+    <ul>
+      <li><strong>Local Execution:</strong> All document transformations are performed locally on your device using client-side JavaScript Web APIs.</li>
+      <li><strong>Zero Server Storage:</strong> Your documents are never uploaded to any remote server or cloud infrastructure operated by PDF Merger.</li>
+      <li><strong>No Account Required:</strong> The service is provided without registration, paywalls, or subscription requirements.</li>
+    </ul>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="terms-card">
+    <div class="section-num">Section 03</div>
+    <h2 class="section-title">User Content &amp; Intellectual Property Ownership</h2>
+    <p>
+      <strong>You retain 100% ownership and copyright</strong> of any documents, text, images, and data that you process using PDF Merger.
+    </p>
+    <ul>
+      <li>PDF Merger does not claim any license, ownership, or intellectual property rights over your files.</li>
+      <li>Because processing takes place strictly in your local device memory, we never have access to, nor do we store or archive, your content.</li>
+      <li>You are solely responsible for ensuring you have the legal right and permission to process, convert, or merge the files you input.</li>
+    </ul>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="terms-card">
+    <div class="section-num">Section 04</div>
+    <h2 class="section-title">Acceptable Use Policy</h2>
+    <p>
+      You agree to use PDF Merger only for lawful purposes in accordance with these Terms. You agree not to:
+    </p>
+    <ul>
+      <li>Attempt to interfere with, disrupt, or compromise the integrity or security of the website;</li>
+      <li>Use automated scripts or scrapers to generate abnormal traffic loads that degrade service availability for other visitors;</li>
+      <li>Distribute malware, viruses, or malicious payloads through the site.</li>
+    </ul>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="terms-card">
+    <div class="section-num">Section 05</div>
+    <h2 class="section-title">Third-Party Advertising &amp; External Links</h2>
+    <p>
+      To sustain free public access to this utility, PDF Merger displays advertisements served by <strong>Google AdSense</strong>.
+    </p>
+    <ul>
+      <li>Advertisements are provided by third-party advertising networks. We do not endorse, guarantee, or assume responsibility for any third-party products, services, or websites advertised.</li>
+      <li>Our website may contain links to external third-party websites (e.g., GitHub). We are not responsible for the content, security, or privacy policies of third-party platforms.</li>
+    </ul>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="terms-card">
+    <div class="section-num">Section 06</div>
+    <h2 class="section-title">Disclaimer of Warranties ("As-Is")</h2>
+    <p>
+      PDF Merger is provided on an <strong>"AS IS"</strong> and <strong>"AS AVAILABLE"</strong> basis, without warranties of any kind, whether express, implied, statutory, or otherwise.
+    </p>
+    <p>
+      While we strive for high conversion accuracy and reliable performance, the developer does not warrant that:
+    </p>
+    <ul>
+      <li>The service will meet all specific formatting or conversion requirements for every proprietary document variant;</li>
+      <li>The website will be uninterrupted, error-free, or entirely bug-free;</li>
+      <li>Output files will be free from corruption in the event of browser memory exhaustion or invalid input syntax.</li>
+    </ul>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="terms-card">
+    <div class="section-num">Section 07</div>
+    <h2 class="section-title">Limitation of Liability</h2>
+    <p>
+      To the maximum extent permitted by applicable law, in no event shall the developer (Mithun Gowda) or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation: loss of data, loss of profits, business interruption, or corruption of files arising out of or in connection with your use of this service.
+    </p>
+    <p>
+      Users are encouraged to maintain independent backups of original documents prior to performing file conversions or merges.
+    </p>
+  </div>
+
+  <!-- Section 8 -->
+  <div class="terms-card">
+    <div class="section-num">Section 08</div>
+    <h2 class="section-title">Modifications to Service and Terms</h2>
+    <p>
+      We reserve the right to modify, enhance, or discontinue features of PDF Merger at any time. Any changes to these Terms of Service will be posted directly to this page with an updated "Last Updated" date. Continued use of the website following any changes signifies your acceptance of the revised Terms.
+    </p>
+  </div>
+
+  <!-- Section 9 -->
+  <div class="terms-card">
+    <div class="section-num">Section 09</div>
+    <h2 class="section-title">Contact Information</h2>
+    <p>
+      If you have questions, feedback, or legal inquiries regarding these Terms of Service, please contact:
+    </p>
+    <p style="margin-top:10px;">
+      <strong>Developer:</strong> Mithun Gowda<br>
+      <strong>Email:</strong> <a href="mailto:mithun2k51124@gmail.com">mithun2k51124@gmail.com</a><br>
+      <strong>GitHub:</strong> <a href="https://github.com/mithun2k51124" target="_blank" rel="noopener noreferrer">github.com/mithun2k51124</a>
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>&copy; 2026 Mithun Gowda &middot; PDF Merger</span>
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center;">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">About &amp; Contact</a>
+      <a href="index.html">&larr; Back to tool</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
